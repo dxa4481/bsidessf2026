@@ -1,0 +1,3945 @@
+var isPresenter = (window.location.search.indexOf("presenter") !== -1);
+
+if (isPresenter) {
+  // ---------- PRESENTER VIEW CODE ----------
+  
+  // Add presenter-specific styles
+  var presenterStyles = document.createElement('style');
+  presenterStyles.textContent = `
+    body {
+      margin: 0;
+      padding: 0;
+      background: #1a1a2e;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+    }
+    
+    #presenter-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    #presenter-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+    
+    #presenter-header button {
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.15s ease;
+    }
+    
+    #startPresBtn {
+      background: #e94560;
+      color: white;
+    }
+    
+    #startPresBtn:hover {
+      background: #d63d56;
+    }
+    
+    #pauseBtn {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.2) !important;
+    }
+    
+    #pauseBtn:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    #timerDisplay {
+      font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #4ade80;
+      background: rgba(74, 222, 128, 0.15);
+      padding: 6px 16px;
+      border-radius: 8px;
+      letter-spacing: 0.05em;
+    }
+    
+    #bleepBtn {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    }
+    
+    #bleepBtn:hover, #bleepBtn:active {
+      background: #ef4444;
+      color: white;
+    }
+    
+    #fullscreenBtn {
+      background: rgba(59, 130, 246, 0.2);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.3) !important;
+    }
+    
+    #fullscreenBtn:hover {
+      background: #3b82f6;
+      color: white;
+    }
+    
+    #fullscreenBtn.active {
+      background: rgba(16, 185, 129, 0.2);
+      color: #6ee7b7;
+      border-color: rgba(16, 185, 129, 0.3) !important;
+    }
+    
+    #fullscreenBtn.active:hover {
+      background: #10b981;
+      color: white;
+    }
+    
+    .presenter-divider {
+      color: rgba(255,255,255,0.2);
+      margin: 0 4px;
+    }
+    
+    .presenter-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.05);
+      transition: background 0.15s;
+    }
+    
+    .presenter-toggle:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    
+    .presenter-toggle input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: #10b981;
+    }
+    
+    .presenter-toggle-label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.8);
+    }
+    
+    .presenter-toggle.offline-indicator {
+      background: rgba(251, 191, 36, 0.15);
+    }
+    
+    .presenter-status {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+    }
+    
+    .presenter-status.loading {
+      color: #fbbf24;
+      background: rgba(251, 191, 36, 0.2);
+    }
+    
+    .presenter-status.active {
+      color: #4ade80;
+      background: rgba(74, 222, 128, 0.2);
+    }
+    
+    /* Font size control in header */
+    .font-size-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 12px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+    }
+    
+    .font-size-control label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.6);
+      white-space: nowrap;
+    }
+    
+    .font-size-control input[type="range"] {
+      width: 80px;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255,255,255,0.2);
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    
+    .font-size-control input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 14px;
+      height: 14px;
+      background: #e94560;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    
+    .font-size-control input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+    
+    .font-size-control span {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.8);
+      min-width: 32px;
+      text-align: right;
+    }
+    
+    .font-size-control input[type="range"]:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    
+    .font-size-control input[type="range"]:disabled::-webkit-slider-thumb {
+      background: rgba(255,255,255,0.3);
+      cursor: not-allowed;
+    }
+    
+    .auto-fit-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    
+    .auto-fit-toggle:hover {
+      background: rgba(255,255,255,0.1);
+    }
+    
+    .auto-fit-toggle input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      accent-color: #10b981;
+    }
+    
+    .auto-fit-toggle-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.8);
+      white-space: nowrap;
+    }
+    
+    .auto-fit-toggle.active {
+      background: rgba(16, 185, 129, 0.2);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    
+    .auto-fit-toggle.active .auto-fit-toggle-label {
+      color: #6ee7b7;
+    }
+    
+    /* Main layout: top-heavy for notes, bottom for previews */
+    #presenter-main {
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      gap: 12px;
+      flex: 1;
+      overflow: hidden;
+      min-height: 0;
+    }
+    
+    /* Top section: Current slide notes - takes most of the space */
+    #current-notes-section {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      border: 2px solid #e94560;
+      overflow: hidden;
+    }
+    
+    #current-notes-section .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: rgba(233, 69, 96, 0.15);
+      border-bottom: 1px solid rgba(233, 69, 96, 0.3);
+      flex-shrink: 0;
+    }
+    
+    #current-notes-section .section-header h3 {
+      margin: 0;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #e94560;
+    }
+    
+    #current-notes-section .slide-number {
+      font-size: 0.8rem;
+      background: rgba(233, 69, 96, 0.2);
+      padding: 4px 12px;
+      border-radius: 12px;
+      color: #e94560;
+      font-weight: 600;
+    }
+    
+    #current-notes-section .notes-content {
+      flex: 1;
+      padding: 20px 24px;
+      overflow-y: auto;
+      min-height: 0;
+    }
+    
+    #current-notes-section .notes-text {
+      font-size: 1.4rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.95);
+      white-space: pre-wrap;
+    }
+    
+    #current-notes-section .notes-text:empty::after {
+      content: 'No speaker notes for this slide';
+      color: rgba(255,255,255,0.3);
+      font-style: italic;
+    }
+    
+    /* Bottom section: Previews and next slide info */
+    #bottom-section {
+      flex-shrink: 0;
+      height: 180px;
+      display: flex;
+      gap: 12px;
+    }
+    
+    /* Current slide preview - compact */
+    #current-preview-panel {
+      width: 280px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      border: 2px solid rgba(233, 69, 96, 0.4);
+      overflow: hidden;
+    }
+    
+    #current-preview-panel .preview-header {
+      padding: 6px 12px;
+      background: rgba(0,0,0,0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      flex-shrink: 0;
+    }
+    
+    #current-preview-panel .preview-header h4 {
+      margin: 0;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: rgba(233, 69, 96, 0.8);
+    }
+    
+    #current-preview-panel .preview-container {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      background: #000;
+      overflow: hidden;
+      min-height: 0;
+    }
+    
+    #current-preview-panel .preview-container img,
+    #current-preview-panel .preview-container video {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    
+    #current-preview-panel .preview-container .placeholder-preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px;
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+    }
+    
+    #current-preview-panel .preview-container .placeholder-preview h3 {
+      margin: 0 0 4px 0;
+      font-size: 0.85rem;
+    }
+    
+    #current-preview-panel .preview-container .placeholder-preview p {
+      margin: 0;
+      opacity: 0.7;
+      font-size: 0.7rem;
+    }
+    
+    #video-seek-container {
+      display: none;
+      padding: 4px 10px 6px;
+      background: rgba(0,0,0,0.2);
+      border-top: 1px solid rgba(255,255,255,0.05);
+      flex-shrink: 0;
+    }
+    
+    .seek-label {
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .seek-label span {
+      color: rgba(255,255,255,0.6);
+    }
+    
+    #seekSlider {
+      width: 100%;
+      height: 4px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    
+    #seekSlider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 12px;
+      height: 12px;
+      background: #e94560;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    
+    /* Next slide panel - compact horizontal layout */
+    #next-slide-panel {
+      flex: 1;
+      display: flex;
+      background: rgba(0,0,0,0.25);
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      overflow: hidden;
+      min-width: 0;
+    }
+    
+    #next-slide-panel .next-preview {
+      width: 200px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      background: #000;
+      border-right: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    #next-slide-panel .next-preview img,
+    #next-slide-panel .next-preview video {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    
+    #next-slide-panel .next-preview .placeholder-preview {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px;
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+    }
+    
+    #next-slide-panel .next-preview .placeholder-preview h3 {
+      margin: 0 0 4px 0;
+      font-size: 0.75rem;
+    }
+    
+    #next-slide-panel .next-preview .placeholder-preview p {
+      margin: 0;
+      opacity: 0.7;
+      font-size: 0.65rem;
+    }
+    
+    #next-slide-panel .next-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      overflow: hidden;
+    }
+    
+    #next-slide-panel .next-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: rgba(0,0,0,0.3);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      flex-shrink: 0;
+    }
+    
+    #next-slide-panel .next-header h4 {
+      margin: 0;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: rgba(255,255,255,0.5);
+    }
+    
+    #next-slide-panel .next-header .slide-number {
+      font-size: 0.7rem;
+      background: rgba(255,255,255,0.1);
+      padding: 2px 8px;
+      border-radius: 8px;
+      color: rgba(255,255,255,0.6);
+    }
+    
+    #next-slide-panel .next-notes {
+      flex: 1;
+      padding: 10px 12px;
+      overflow-y: auto;
+      min-height: 0;
+    }
+    
+    #next-slide-panel .next-notes .notes-text {
+      font-size: 0.8rem;
+      line-height: 1.5;
+      color: rgba(255,255,255,0.7);
+      white-space: pre-wrap;
+    }
+    
+    #next-slide-panel .next-notes .notes-text:empty::after {
+      content: 'No speaker notes';
+      color: rgba(255,255,255,0.3);
+      font-style: italic;
+      font-size: 0.75rem;
+    }
+    
+    .end-message {
+      color: rgba(255,255,255,0.4);
+      font-style: italic;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.85rem;
+    }
+    
+    /* Responsive for smaller windows */
+    @media (max-width: 800px) {
+      #bottom-section {
+        flex-direction: column;
+        height: auto;
+        min-height: 250px;
+      }
+      
+      #current-preview-panel {
+        width: 100%;
+        height: 120px;
+      }
+      
+      #next-slide-panel {
+        height: 130px;
+      }
+      
+      #next-slide-panel .next-preview {
+        width: 150px;
+      }
+    }
+  `;
+  document.head.appendChild(presenterStyles);
+  
+  document.body.innerHTML = `
+    <div id="presenter-container">
+      <div id="presenter-header">
+        <button id="startPresBtn">▶ Start Presentation</button>
+        <button id="pauseBtn" style="display:none;">⏸ Pause</button>
+        <span id="timerDisplay" style="display:none;">00:00:00</span>
+        <button id="fullscreenBtn" title="Toggle fullscreen on presentation window">⛶ Full Screen</button>
+        <button id="bleepBtn">🔇 Bleep</button>
+        <span class="presenter-divider">|</span>
+        <div class="font-size-control">
+          <label for="notesFontSize">Notes Size</label>
+          <input type="range" id="notesFontSize" min="80" max="200" value="140">
+          <span id="notesFontSizeValue">140%</span>
+        </div>
+        <label class="auto-fit-toggle" id="autoFitToggle">
+          <input type="checkbox" id="autoFitCheckbox">
+          <span class="auto-fit-toggle-label">Auto-fit</span>
+        </label>
+        <span class="presenter-divider">|</span>
+        <label class="presenter-toggle">
+          <input type="checkbox" id="presenterSubtitles">
+          <span class="presenter-toggle-label">Subtitles</span>
+        </label>
+        <label class="presenter-toggle offline-indicator">
+          <input type="checkbox" id="presenterOfflineMode">
+          <span class="presenter-toggle-label">Offline</span>
+        </label>
+        <span id="presenterSubtitleStatus" class="presenter-status"></span>
+      </div>
+      
+      <div id="presenter-main">
+        <!-- Top: Current slide speaker notes (takes most of the space) -->
+        <div id="current-notes-section">
+          <div class="section-header">
+            <h3>Current Slide Notes</h3>
+            <span class="slide-number" id="current-slide-number">--</span>
+          </div>
+          <div class="notes-content">
+            <div class="notes-text" id="current-notes"></div>
+          </div>
+        </div>
+        
+        <!-- Bottom: Previews and next slide info -->
+        <div id="bottom-section">
+          <!-- Current slide preview (small) -->
+          <div id="current-preview-panel">
+            <div class="preview-header">
+              <h4>Current Preview</h4>
+            </div>
+            <div class="preview-container" id="current-preview"></div>
+            <div id="video-seek-container">
+              <div class="seek-label">🎬 Seek <span id="video-time"></span></div>
+              <input type="range" id="seekSlider" min="0" max="100" value="0">
+            </div>
+          </div>
+          
+          <!-- Next slide panel (small preview + small notes) -->
+          <div id="next-slide-panel">
+            <div class="next-preview" id="next-preview"></div>
+            <div class="next-info">
+              <div class="next-header">
+                <h4>Next Slide</h4>
+                <span class="slide-number" id="next-slide-number">--</span>
+              </div>
+              <div class="next-notes">
+                <div class="notes-text" id="next-notes"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  var presenterVideo = null;
+  var timerInterval = null;
+  var startTime = null;
+  var pausedOffset = 0;
+  var pausedStartTime = 0;
+  var isPausedLocal = false;
+
+  function updateTimer() {
+    if (!isPausedLocal && startTime) {
+      var elapsed = Date.now() - startTime - pausedOffset;
+      document.getElementById("timerDisplay").innerText = formatTime(elapsed);
+    }
+  }
+
+  function formatTime(ms) {
+    var totalSeconds = Math.floor(ms / 1000);
+    var hours = Math.floor(totalSeconds / 3600);
+    var minutes = Math.floor((totalSeconds % 3600) / 60);
+    var seconds = totalSeconds % 60;
+    return (
+      (hours < 10 ? "0" + hours : hours) + ":" +
+      (minutes < 10 ? "0" + minutes : minutes) + ":" +
+      (seconds < 10 ? "0" + seconds : seconds)
+    );
+  }
+
+  // Font size control for speaker notes
+  var notesFontSizeSlider = document.getElementById("notesFontSize");
+  var notesFontSizeValue = document.getElementById("notesFontSizeValue");
+  var currentNotesText = document.getElementById("current-notes");
+  var autoFitCheckbox = document.getElementById("autoFitCheckbox");
+  var autoFitToggle = document.getElementById("autoFitToggle");
+  var notesContentContainer = document.querySelector("#current-notes-section .notes-content");
+  var isAutoFitEnabled = false;
+  
+  // Load saved font size from localStorage
+  var savedFontSize = localStorage.getItem("presenterNotesFontSize");
+  if (savedFontSize) {
+    notesFontSizeSlider.value = savedFontSize;
+    notesFontSizeValue.textContent = savedFontSize + "%";
+    currentNotesText.style.fontSize = (parseFloat(savedFontSize) / 100 * 1.4) + "rem";
+  }
+  
+  // Load auto-fit setting from localStorage
+  var savedAutoFit = localStorage.getItem("presenterNotesAutoFit");
+  if (savedAutoFit === "true") {
+    isAutoFitEnabled = true;
+    autoFitCheckbox.checked = true;
+    autoFitToggle.classList.add("active");
+    notesFontSizeSlider.disabled = true;
+  }
+  
+  // Calculate and apply auto-fit font size
+  function calculateAutoFitFontSize() {
+    if (!isAutoFitEnabled || !currentNotesText.innerText.trim()) {
+      return;
+    }
+    
+    var containerHeight = notesContentContainer.clientHeight;
+    var containerWidth = notesContentContainer.clientWidth;
+    
+    if (containerHeight <= 0 || containerWidth <= 0) {
+      return;
+    }
+    
+    // Binary search for the optimal font size
+    var minSize = 0.5;  // rem
+    var maxSize = 6.0;  // rem
+    var optimalSize = minSize;
+    
+    while (maxSize - minSize > 0.02) {
+      var midSize = (minSize + maxSize) / 2;
+      currentNotesText.style.fontSize = midSize + "rem";
+      
+      // Force layout recalculation
+      void notesContentContainer.offsetHeight;
+      
+      // Check if text fits (no scrolling needed)
+      // Use strict comparison - scrollHeight must be clearly less than clientHeight
+      var scrollHeight = notesContentContainer.scrollHeight;
+      var clientHeight = notesContentContainer.clientHeight;
+      
+      if (scrollHeight <= clientHeight) {
+        // Text fits, try larger
+        optimalSize = midSize;
+        minSize = midSize;
+      } else {
+        // Text too big, try smaller
+        maxSize = midSize;
+      }
+    }
+    
+    // Apply a small safety reduction (5%) to ensure text is never cut off
+    var safeSize = optimalSize * 0.95;
+    currentNotesText.style.fontSize = safeSize + "rem";
+    
+    // Update the slider display to reflect the auto-fit size (as percentage of 1.4rem base)
+    var percentage = Math.round((safeSize / 1.4) * 100);
+    notesFontSizeValue.textContent = percentage + "%";
+  }
+  
+  // Handle auto-fit checkbox change
+  autoFitCheckbox.addEventListener("change", function() {
+    isAutoFitEnabled = this.checked;
+    localStorage.setItem("presenterNotesAutoFit", isAutoFitEnabled);
+    
+    if (isAutoFitEnabled) {
+      autoFitToggle.classList.add("active");
+      notesFontSizeSlider.disabled = true;
+      calculateAutoFitFontSize();
+    } else {
+      autoFitToggle.classList.remove("active");
+      notesFontSizeSlider.disabled = false;
+      // Restore manual font size
+      var size = notesFontSizeSlider.value;
+      currentNotesText.style.fontSize = (parseFloat(size) / 100 * 1.4) + "rem";
+      notesFontSizeValue.textContent = size + "%";
+    }
+  });
+  
+  notesFontSizeSlider.addEventListener("input", function() {
+    if (isAutoFitEnabled) return;  // Ignore if auto-fit is enabled
+    var size = this.value;
+    notesFontSizeValue.textContent = size + "%";
+    // Base font size is 1.4rem, scale from there
+    currentNotesText.style.fontSize = (parseFloat(size) / 100 * 1.4) + "rem";
+    // Save to localStorage for persistence
+    localStorage.setItem("presenterNotesFontSize", size);
+  });
+  
+  // Recalculate auto-fit on window resize
+  var resizeTimeout;
+  window.addEventListener("resize", function() {
+    if (isAutoFitEnabled) {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(calculateAutoFitFontSize, 100);
+    }
+  });
+
+  document.getElementById("startPresBtn").addEventListener("click", function() {
+    if (window.opener && !window.opener.closed) {
+      window.opener.startPresentation();
+    }
+    document.getElementById("startPresBtn").style.display = "none";
+    document.getElementById("pauseBtn").style.display = "inline-block";
+    document.getElementById("timerDisplay").style.display = "inline-block";
+    startTime = Date.now();
+    timerInterval = setInterval(updateTimer, 1000);
+  });
+
+  document.getElementById("pauseBtn").addEventListener("click", function() {
+    if (window.opener && !window.opener.closed) {
+      window.opener.postMessage({ type: "togglePause" }, "*");
+    }
+    if (!isPausedLocal) {
+      pausedStartTime = Date.now();
+      isPausedLocal = true;
+      this.innerText = "▶ Resume";
+    } else {
+      pausedOffset += Date.now() - pausedStartTime;
+      isPausedLocal = false;
+      this.innerText = "⏸ Pause";
+    }
+  });
+
+  var seekSlider = document.getElementById("seekSlider");
+  var videoSeekContainer = document.getElementById("video-seek-container");
+  var videoTimeDisplay = document.getElementById("video-time");
+  
+  function formatVideoTime(seconds) {
+    var mins = Math.floor(seconds / 60);
+    var secs = Math.floor(seconds % 60);
+    return mins + ":" + (secs < 10 ? "0" : "") + secs;
+  }
+  
+  if (seekSlider) {
+    seekSlider.addEventListener("input", function(e) {
+      if (presenterVideo && presenterVideo.duration) {
+        presenterVideo.currentTime = (e.target.value / 100) * presenterVideo.duration;
+      }
+    });
+  }
+
+  function renderSlidePreview(slide, container, isCurrentSlide) {
+    container.innerHTML = "";
+    
+    if (slide.type === "image") {
+      var img = document.createElement("img");
+      img.src = slide.src;
+      container.appendChild(img);
+      if (isCurrentSlide) {
+        videoSeekContainer.style.display = "none";
+        presenterVideo = null;
+      }
+    } else if (slide.type === "video") {
+      var video = document.createElement("video");
+      video.src = slide.src;
+      video.controls = true;
+      if (isCurrentSlide) {
+        video.muted = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.loop = true;
+        presenterVideo = video;
+        videoSeekContainer.style.display = "block";
+        video.addEventListener("timeupdate", function() {
+          if (video.duration) {
+            seekSlider.value = (video.currentTime / video.duration) * 100;
+            videoTimeDisplay.textContent = formatVideoTime(video.currentTime) + " / " + formatVideoTime(video.duration);
+          }
+        });
+        video.addEventListener("loadedmetadata", function() {
+          videoTimeDisplay.textContent = "0:00 / " + formatVideoTime(video.duration);
+        });
+      }
+      container.appendChild(video);
+    } else if (slide.type === "placeholder") {
+      var placeholderDiv = document.createElement("div");
+      placeholderDiv.className = "placeholder-preview";
+      placeholderDiv.style.background = slide.backgroundColor || '#333';
+      var bodyText = slide.text ? '<p>' + slide.text + '</p>' : '';
+      placeholderDiv.innerHTML = '<h3>' + (slide.title || 'Placeholder') + '</h3>' + bodyText;
+      container.appendChild(placeholderDiv);
+      if (isCurrentSlide) {
+        videoSeekContainer.style.display = "none";
+        presenterVideo = null;
+      }
+    }
+  }
+
+  window.addEventListener("message", function(event) {
+    if (event.data.type === "update") {
+      var currentIndex = event.data.currentSlideIndex;
+      var slides = event.data.slides;
+      var slideOffset = event.data.slideOffset || 0;  // Offset of buffered slides array
+      var totalSlides = event.data.totalSlides || slides.length;
+      
+      // Calculate index within the buffered array
+      var bufferedIndex = currentIndex - slideOffset;
+      var curSlide = slides[bufferedIndex];
+      
+      if (!curSlide) {
+        console.warn("Current slide not in buffer");
+        return;
+      }
+      
+      // Update current slide number
+      document.getElementById("current-slide-number").textContent = (currentIndex + 1) + " / " + totalSlides;
+      
+      renderSlidePreview(curSlide, document.getElementById("current-preview"), true);
+      
+      var notes = (curSlide.notes || "").replace(/^Slide\s*\d+\s*:\s*/i, "");
+      document.getElementById("current-notes").innerText = notes;
+      
+      // Recalculate auto-fit font size when notes change
+      if (isAutoFitEnabled) {
+        // Use a small delay to ensure the DOM has updated
+        setTimeout(calculateAutoFitFontSize, 10);
+      }
+
+      var nextPreview = document.getElementById("next-preview");
+      var nextBufferedIndex = bufferedIndex + 1;
+      var nextSlideNumber = document.getElementById("next-slide-number");
+      
+      if (currentIndex + 1 < totalSlides && nextBufferedIndex < slides.length) {
+        var nextSlide = slides[nextBufferedIndex];
+        nextSlideNumber.textContent = (currentIndex + 2) + " / " + totalSlides;
+        renderSlidePreview(nextSlide, nextPreview, false);
+        var nextNotes = (nextSlide.notes || "").replace(/^Slide\s*\d+\s*:\s*/i, "");
+        document.getElementById("next-notes").innerText = nextNotes;
+      } else if (currentIndex + 1 >= totalSlides) {
+        nextSlideNumber.textContent = "End";
+        nextPreview.innerHTML = "<div class='end-message'>🎉 End of presentation</div>";
+        document.getElementById("next-notes").innerText = "";
+      } else {
+        nextSlideNumber.textContent = (currentIndex + 2) + " / " + totalSlides;
+        nextPreview.innerHTML = "<div class='end-message'>Loading...</div>";
+        document.getElementById("next-notes").innerText = "";
+      }
+
+      if (typeof event.data.paused !== "undefined") {
+        if (event.data.paused && !isPausedLocal) {
+          isPausedLocal = true;
+          document.getElementById("pauseBtn").innerText = "▶ Resume";
+        } else if (!event.data.paused && isPausedLocal) {
+          isPausedLocal = false;
+          document.getElementById("pauseBtn").innerText = "⏸ Pause";
+        }
+      }
+    }
+  });
+
+  document.addEventListener("keydown", function(e) {
+    e.preventDefault();
+    if (e.key === "ArrowRight" && window.opener && !window.opener.closed) {
+      window.opener.advanceSlide();
+    } else if (e.key === "ArrowLeft" && window.opener && !window.opener.closed) {
+      window.opener.previousSlide();
+    }
+  });
+
+  // Bleep button
+  var bleepBtn = document.getElementById("bleepBtn");
+  var audioCtx = null;
+  var oscillator = null;
+
+  bleepBtn.addEventListener("mousedown", function() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    oscillator = audioCtx.createOscillator();
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(1000, audioCtx.currentTime);
+    oscillator.connect(audioCtx.destination);
+    oscillator.start();
+  });
+
+  function stopBleep() {
+    if (oscillator) {
+      oscillator.stop();
+      oscillator.disconnect();
+      oscillator = null;
+    }
+  }
+  bleepBtn.addEventListener("mouseup", stopBleep);
+  bleepBtn.addEventListener("mouseleave", stopBleep);
+
+  // Fullscreen button - toggles fullscreen on the main presentation window
+  var fullscreenBtn = document.getElementById("fullscreenBtn");
+  var isFullscreen = false;
+  
+  function updateFullscreenButton() {
+    if (isFullscreen) {
+      fullscreenBtn.textContent = "⛶ Exit Full Screen";
+      fullscreenBtn.classList.add("active");
+    } else {
+      fullscreenBtn.textContent = "⛶ Full Screen";
+      fullscreenBtn.classList.remove("active");
+    }
+  }
+  
+  fullscreenBtn.addEventListener("click", function() {
+    if (window.opener && !window.opener.closed) {
+      if (isFullscreen) {
+        // Exit fullscreen
+        if (window.opener.exitPresentationFullscreen) {
+          window.opener.exitPresentationFullscreen();
+        }
+      } else {
+        // Show fullscreen prompt in the main window (user must click there)
+        if (window.opener.showFullscreenPrompt) {
+          window.opener.showFullscreenPrompt();
+        }
+      }
+    }
+  });
+  
+  // Listen for fullscreen state changes from main window
+  window.addEventListener("message", function(event) {
+    if (event.data.type === "fullscreenChange") {
+      isFullscreen = event.data.isFullscreen;
+      updateFullscreenButton();
+    }
+  });
+  
+  // Sync initial fullscreen state from main window
+  if (window.opener && !window.opener.closed && window.opener.isPresentationFullscreen) {
+    isFullscreen = window.opener.isPresentationFullscreen();
+    updateFullscreenButton();
+  }
+
+  // Subtitle controls in presenter view
+  var presenterSubtitlesToggle = document.getElementById("presenterSubtitles");
+  var presenterOfflineToggle = document.getElementById("presenterOfflineMode");
+  var presenterSubtitleStatus = document.getElementById("presenterSubtitleStatus");
+
+  presenterSubtitlesToggle.addEventListener("change", function() {
+    if (window.opener && !window.opener.closed && window.opener.subtitleSystem) {
+      window.opener.subtitleSystem.toggle(this.checked);
+      // Also update the main window's checkbox
+      var mainToggle = window.opener.document.getElementById("subtitlesEnabled");
+      if (mainToggle) mainToggle.checked = this.checked;
+    }
+  });
+
+  presenterOfflineToggle.addEventListener("change", function() {
+    if (window.opener && !window.opener.closed && window.opener.subtitleSystem) {
+      window.opener.subtitleSystem.setOfflineMode(this.checked);
+      // Also update the main window's checkbox
+      var mainToggle = window.opener.document.getElementById("offlineModeEnabled");
+      if (mainToggle) mainToggle.checked = this.checked;
+    }
+  });
+
+  // Sync initial state from main window
+  function syncSubtitleState() {
+    if (window.opener && !window.opener.closed && window.opener.subtitleSystem) {
+      presenterSubtitlesToggle.checked = window.opener.subtitleSystem.isEnabled();
+      presenterOfflineToggle.checked = window.opener.subtitleSystem.isOfflineMode();
+    }
+  }
+  
+  // Sync on load and periodically (to catch status changes)
+  syncSubtitleState();
+  setInterval(function() {
+    syncSubtitleState();
+    // Also sync status text
+    if (window.opener && !window.opener.closed) {
+      var mainStatus = window.opener.document.getElementById("subtitle-status");
+      if (mainStatus && presenterSubtitleStatus) {
+        presenterSubtitleStatus.textContent = mainStatus.textContent;
+        presenterSubtitleStatus.className = mainStatus.className.replace("subtitle-status", "presenter-status");
+      }
+    }
+  }, 500);
+
+} else {
+  // ---------- MAIN VIEW CODE ----------
+  
+  var slides = [];
+  var audioTracks = [];
+  var presentationSettings = {
+    subtitleSize: 100  // Default 100%
+  };
+  var currentSlideIndex = 0;
+  var selectedSlideIndex = -1;
+  var selectedAudioIndex = -1;
+  var presenterWindow = null;
+  window.presentationStarted = false;
+  var paused = false;
+  window.currentMedia = null;
+  var activeAudioElements = {};
+  var canChangeSlide = true;
+  var placeholderAdvanceTimer = null; // Timer for placeholder timed auto-advance
+
+  // Slide layout: each slide block is 70px wide, with 6px gaps between all flex items
+  // The slides timeline has drop indicators (0px effective width due to -2px margins) between slides
+  // So each slide "slot" is: 100px slide + 6px gap + 0px drop + 6px gap = 112px
+  // First slide starts at: 0px (initial drop) + 6px gap = 6px offset
+  var BLOCK_WIDTH = 112;
+  var TIMELINE_INITIAL_OFFSET = 6;
+  
+  // ============================================
+  // SLIDE BUFFERING CONFIGURATION
+  // ============================================
+  // Only render slides within this many positions of the visible area
+  var SLIDE_BUFFER_SIZE = 10;
+  // Number of slides to send to presenter view (before and after current)
+  var PRESENTER_BUFFER_SIZE = 3;
+  // Track currently rendered slide range for virtualization
+  var renderedSlideRange = { start: 0, end: 0 };
+  // Track scroll position for debounced updates
+  var scrollUpdatePending = false;
+  var lastScrollLeft = 0;
+  
+  // ============================================
+  // SLIDE PAGINATION CONFIGURATION
+  // ============================================
+  // Maximum number of slides to load in the editor at once
+  var SLIDE_WINDOW_SIZE = 10;
+  // Current pagination window tracking
+  var slideWindowStart = 0;  // First slide index in current window
+  var slideWindowEnd = 0;    // Last slide index in current window (exclusive)
+
+  // DOM elements
+  var editModeBtn = document.getElementById("editModeBtn");
+  var presentModeBtn = document.getElementById("presentModeBtn");
+  var presentControls = document.getElementById("present-controls");
+  var editControls = document.getElementById("edit-controls");
+  var editModeContainer = document.getElementById("edit-mode");
+  var presentationContainer = document.getElementById("presentation");
+  
+  var slidesTimeline = document.getElementById("slides-timeline");
+  var audioTimeline = document.getElementById("audio-timeline");
+  var slideCountDisplay = document.getElementById("slide-count-display");
+  
+  var slideEditor = document.getElementById("slide-editor");
+  var audioEditor = document.getElementById("audio-editor");
+  var slideForm = document.getElementById("slide-form");
+  var audioForm = document.getElementById("audio-form");
+  var editorPlaceholder = document.getElementById("editor-placeholder");
+  var previewContainer = document.getElementById("preview-container");
+  var slidePositionBadge = document.getElementById("slide-position-badge");
+  
+  var navControls = document.getElementById("nav-controls");
+  var navFirstBtn = document.getElementById("navFirstBtn");
+  var navPrevBtn = document.getElementById("navPrevBtn");
+  var navNextBtn = document.getElementById("navNextBtn");
+  var navLastBtn = document.getElementById("navLastBtn");
+  
+  // Pagination controls
+  var paginationControls = document.getElementById("pagination-controls");
+  var pagePrevBtn = document.getElementById("pagePrevBtn");
+  var pageNextBtn = document.getElementById("pageNextBtn");
+  var pageIndicator = document.getElementById("page-indicator");
+  
+  var exportBtn = document.getElementById("exportBtn");
+  var importBtn = document.getElementById("importBtn");
+  var importInput = document.getElementById("importInput");
+  
+  var addVideoBtn = document.getElementById("addVideoBtn");
+  var addImageBtn = document.getElementById("addImageBtn");
+  var addPlaceholderBtn = document.getElementById("addPlaceholderBtn");
+  var addAudioBtn = document.getElementById("addAudioBtn");
+  var deleteSlideBtn = document.getElementById("deleteSlideBtn");
+  var deleteAudioBtn = document.getElementById("deleteAudioBtn");
+  
+  var slideTypeSelect = document.getElementById("slide-type");
+  var slideSrcInput = document.getElementById("slide-src");
+  var slideNotesInput = document.getElementById("slide-notes");
+  var slideLoopInput = document.getElementById("slide-loop");
+  var slideZoompanInput = document.getElementById("slide-zoompan");
+  var slideAutoAdvanceInput = document.getElementById("slide-auto-advance");
+  var placeholderTitleInput = document.getElementById("placeholder-title");
+  var placeholderTextInput = document.getElementById("placeholder-text");
+  var placeholderColorInput = document.getElementById("placeholder-color");
+  var placeholderTimedAdvanceInput = document.getElementById("placeholder-timed-advance");
+  var placeholderDurationInput = document.getElementById("placeholder-duration");
+  var placeholderDurationGroup = document.getElementById("placeholder-duration-group");
+  var srcGroup = document.getElementById("src-group");
+  var placeholderGroup = document.getElementById("placeholder-group");
+  var loopGroup = document.getElementById("loop-group");
+  var zoompanGroup = document.getElementById("zoompan-group");
+  var autoAdvanceGroup = document.getElementById("auto-advance-group");
+  var videoVolumeGroup = document.getElementById("video-volume-group");
+  var videoVolumeSlider = document.getElementById("video-volume");
+  var videoVolumeValue = document.getElementById("video-volume-value");
+  
+  var audioSrcInput = document.getElementById("audio-src");
+  var audioStartInput = document.getElementById("audio-start");
+  var audioEndInput = document.getElementById("audio-end");
+  var audioLoopInput = document.getElementById("audio-loop");
+  var audioPreview = document.getElementById("audio-preview");
+  var audioPreviewContainer = document.getElementById("audio-preview-container");
+  
+  var draggedIndex = null;
+  
+  function hideAudioPreview() {
+    if (audioPreviewContainer) {
+      audioPreviewContainer.style.display = "none";
+      audioPreview.pause();
+    }
+  }
+
+  // ============================================
+  // LOCAL STORAGE VERSIONING
+  // ============================================
+  
+  var LOCAL_STORAGE_KEY = "presentation_local_data";
+  
+  // Simple hash function for comparing data versions
+  function hashData(data) {
+    var str = JSON.stringify(data);
+    var hash = 0;
+    for (var i = 0; i < str.length; i++) {
+      var char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash.toString();
+  }
+  
+  // Save current data to localStorage
+  function saveToLocalStorage() {
+    var data = { slides: slides, audio: audioTracks, settings: presentationSettings };
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+  }
+  
+  // Load data from localStorage
+  function loadFromLocalStorage() {
+    var stored = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch (e) {
+        console.error("Error parsing local storage data:", e);
+        return null;
+      }
+    }
+    return null;
+  }
+  
+  // Clear local storage data
+  function clearLocalStorage() {
+    localStorage.removeItem(LOCAL_STORAGE_KEY);
+  }
+  
+  // Version conflict modal elements
+  var versionConflictModal = document.getElementById("version-conflict-modal");
+  var serverVersionInfo = document.getElementById("server-version-info");
+  var localVersionInfo = document.getElementById("local-version-info");
+  var versionUseServerBtn = document.getElementById("version-use-server");
+  var versionUseLocalBtn = document.getElementById("version-use-local");
+  
+  // Show version conflict modal
+  function showVersionConflictModal(serverData, localData) {
+    var serverSlides = (serverData.slides || serverData || []).length;
+    var serverAudio = (serverData.audio || []).length;
+    var localSlides = (localData.slides || []).length;
+    var localAudio = (localData.audio || []).length;
+    
+    serverVersionInfo.textContent = serverSlides + " slides, " + serverAudio + " audio";
+    localVersionInfo.textContent = localSlides + " slides, " + localAudio + " audio";
+    
+    versionConflictModal.style.display = "flex";
+  }
+  
+  function hideVersionConflictModal() {
+    versionConflictModal.style.display = "none";
+  }
+  
+  // Pending data for conflict resolution
+  var pendingServerData = null;
+  var pendingLocalData = null;
+  
+  // Handle "Use Server Version" click
+  versionUseServerBtn.addEventListener("click", function() {
+    if (pendingServerData) {
+      slides = pendingServerData.slides || pendingServerData || [];
+      audioTracks = pendingServerData.audio || [];
+      presentationSettings = pendingServerData.settings || { subtitleSize: 100 };
+      // Reset pagination window to start
+      slideWindowStart = 0;
+      slideWindowEnd = Math.min(slides.length, SLIDE_WINDOW_SIZE);
+      // Clear local storage so we start fresh from server
+      clearLocalStorage();
+      renderTimelines();
+      applySubtitleSettings();
+    }
+    hideVersionConflictModal();
+    pendingServerData = null;
+    pendingLocalData = null;
+  });
+  
+  // Handle "Restore Local Copy" click
+  versionUseLocalBtn.addEventListener("click", function() {
+    if (pendingLocalData) {
+      slides = pendingLocalData.slides || [];
+      audioTracks = pendingLocalData.audio || [];
+      presentationSettings = pendingLocalData.settings || { subtitleSize: 100 };
+      // Reset pagination window to start
+      slideWindowStart = 0;
+      slideWindowEnd = Math.min(slides.length, SLIDE_WINDOW_SIZE);
+      renderTimelines();
+      applySubtitleSettings();
+    }
+    hideVersionConflictModal();
+    pendingServerData = null;
+    pendingLocalData = null;
+  });
+  
+  // Load data with version checking
+  fetch('data.json')
+    .then(function(r) { return r.json(); })
+    .then(function(serverData) {
+      var serverHash = hashData(serverData);
+      var localData = loadFromLocalStorage();
+      
+      // If we have local data that differs from server
+      if (localData) {
+        var localHash = hashData(localData);
+        
+        if (localHash !== serverHash) {
+          // Local differs from server - show conflict modal
+          pendingServerData = serverData;
+          pendingLocalData = localData;
+          // Load server data initially (user can switch to local)
+          slides = serverData.slides || serverData || [];
+          audioTracks = serverData.audio || [];
+          presentationSettings = serverData.settings || { subtitleSize: 100 };
+          renderTimelines();
+          applySubtitleSettings();
+          showVersionConflictModal(serverData, localData);
+        } else {
+          // Local matches server - use server data, clear local
+          slides = serverData.slides || serverData || [];
+          audioTracks = serverData.audio || [];
+          presentationSettings = serverData.settings || { subtitleSize: 100 };
+          renderTimelines();
+          applySubtitleSettings();
+          clearLocalStorage();
+        }
+      } else {
+        // No local data - just use server
+        slides = serverData.slides || serverData || [];
+        audioTracks = serverData.audio || [];
+        presentationSettings = serverData.settings || { subtitleSize: 100 };
+        renderTimelines();
+        applySubtitleSettings();
+      }
+    })
+    .catch(function(e) {
+      console.error("Error loading data:", e);
+      // Try to load from local storage as fallback
+      var localData = loadFromLocalStorage();
+      if (localData) {
+        slides = localData.slides || [];
+        audioTracks = localData.audio || [];
+        presentationSettings = localData.settings || { subtitleSize: 100 };
+      } else {
+        slides = [];
+        audioTracks = [];
+        presentationSettings = { subtitleSize: 100 };
+      }
+      renderTimelines();
+      applySubtitleSettings();
+    });
+
+  // Mode switching
+  function switchToEditMode() {
+    editModeBtn.classList.add("active");
+    presentModeBtn.classList.remove("active");
+    presentControls.style.display = "none";
+    editControls.style.display = "flex";
+    document.body.classList.remove("present-mode");
+    editModeContainer.style.display = "flex";
+    presentationContainer.classList.remove("active");
+    window.presentationStarted = false;
+    paused = false;
+    if (window.currentMedia) { window.currentMedia.pause(); window.currentMedia = null; }
+    for (var k in activeAudioElements) { activeAudioElements[k].pause(); delete activeAudioElements[k]; }
+    
+    // Stop subtitle system when exiting presentation
+    if (window.subtitleSystem) {
+      window.subtitleSystem.onPresentationEnd();
+    }
+  }
+  
+  function switchToPresentMode() {
+    editModeBtn.classList.remove("active");
+    presentModeBtn.classList.add("active");
+    presentControls.style.display = "flex";
+    editControls.style.display = "none";
+    editModeContainer.style.display = "none";
+    presentationContainer.classList.add("active");
+    currentSlideIndex = selectedSlideIndex >= 0 ? selectedSlideIndex : 0;
+  }
+  
+  editModeBtn.addEventListener("click", switchToEditMode);
+  presentModeBtn.addEventListener("click", switchToPresentMode);
+  
+  // Scroll event handler for virtualized slide rendering
+  var timelineScrollArea = document.getElementById("timeline-scroll-area");
+  if (timelineScrollArea) {
+    timelineScrollArea.addEventListener("scroll", function() {
+      // Debounce scroll updates for performance
+      if (!scrollUpdatePending) {
+        scrollUpdatePending = true;
+        requestAnimationFrame(function() {
+          updateVisibleSlides();
+          scrollUpdatePending = false;
+        });
+      }
+    });
+  }
+
+  // Timeline rendering
+  function renderTimelines() {
+    renderSlidesTimeline();
+    renderAudioTimeline();
+    slideCountDisplay.textContent = slides.length + " slide" + (slides.length !== 1 ? "s" : "");
+    updateNavButtons();
+  }
+  
+  // Calculate which slides should be rendered based on scroll position
+  // Works within the current pagination window
+  function calculateVisibleSlideRange() {
+    var scrollArea = document.getElementById("timeline-scroll-area");
+    if (!scrollArea || slides.length === 0) {
+      return { start: slideWindowStart, end: Math.min(slideWindowEnd - 1, slides.length - 1) };
+    }
+    
+    var scrollLeft = scrollArea.scrollLeft;
+    var containerWidth = scrollArea.clientWidth;
+    
+    // Calculate visible range based on scroll position within the windowed view
+    var firstVisible = Math.floor((scrollLeft - TIMELINE_INITIAL_OFFSET) / BLOCK_WIDTH);
+    var lastVisible = Math.ceil((scrollLeft + containerWidth - TIMELINE_INITIAL_OFFSET) / BLOCK_WIDTH);
+    
+    // Map to actual slide indices (relative to window start)
+    var start = Math.max(slideWindowStart, slideWindowStart + firstVisible - SLIDE_BUFFER_SIZE);
+    var end = Math.min(slideWindowEnd - 1, slideWindowStart + lastVisible + SLIDE_BUFFER_SIZE);
+    
+    // Ensure within total bounds
+    start = Math.max(0, start);
+    end = Math.min(slides.length - 1, end);
+    
+    return { start: start, end: end };
+  }
+  
+  // Create a slide block element (extracted for reuse)
+  function createSlideBlock(slide, index) {
+    var block = document.createElement("div");
+    block.className = "slide-block" + (index === selectedSlideIndex ? " selected" : "");
+    block.dataset.index = index;
+    block.draggable = true;
+    
+    // Set thumbnail background
+    if (slide.type === "video" && slide.src) {
+      // For video, we'll capture a frame using a hidden video element
+      generateVideoThumbnail(slide.src, function(dataUrl) {
+        if (dataUrl) block.style.backgroundImage = "url(" + dataUrl + ")";
+      });
+    } else if (slide.type === "image" && slide.src) {
+      block.style.backgroundImage = "url(" + slide.src + ")";
+    } else if (slide.type === "placeholder") {
+      block.style.background = slide.backgroundColor || "#333";
+    }
+    
+    var icon = slide.type === "video" ? "🎬" : slide.type === "image" ? "🖼️" : "⏳";
+    block.innerHTML = '<div class="block-overlay"><div class="block-number">' + (index + 1) + '</div><div class="block-icon">' + icon + '</div></div>';
+    
+    block.addEventListener("click", function() { selectSlide(index); });
+    
+    // Drag events on slide blocks
+    block.addEventListener("dragstart", function(e) {
+      draggedIndex = index;
+      setTimeout(function() { block.classList.add("dragging"); }, 0);
+      e.dataTransfer.effectAllowed = "move";
+      e.dataTransfer.setData("text/plain", index);
+    });
+    
+    block.addEventListener("dragend", function() {
+      block.classList.remove("dragging");
+      clearAllDropIndicators();
+      draggedIndex = null;
+    });
+    
+    return block;
+  }
+  
+  // Create a placeholder element for slides outside the buffer
+  function createSlidePlaceholder(index) {
+    var placeholder = document.createElement("div");
+    placeholder.className = "slide-block slide-placeholder";
+    placeholder.dataset.index = index;
+    placeholder.dataset.placeholder = "true";
+    // Minimal content - just the number
+    placeholder.innerHTML = '<div class="block-overlay"><div class="block-number">' + (index + 1) + '</div></div>';
+    placeholder.addEventListener("click", function() { selectSlide(index); });
+    return placeholder;
+  }
+  
+  // ============================================
+  // PAGINATION HELPER FUNCTIONS
+  // ============================================
+  
+  // Calculate and update the slide window based on current state
+  function updateSlideWindow(targetIndex) {
+    if (slides.length === 0) {
+      slideWindowStart = 0;
+      slideWindowEnd = 0;
+      return;
+    }
+    
+    // If a target index is provided, ensure it's in the window
+    if (typeof targetIndex === 'number') {
+      // If target is outside current window, shift window to include it
+      if (targetIndex < slideWindowStart || targetIndex >= slideWindowEnd) {
+        // Center the window around the target if possible
+        var halfWindow = Math.floor(SLIDE_WINDOW_SIZE / 2);
+        slideWindowStart = Math.max(0, targetIndex - halfWindow);
+        slideWindowEnd = Math.min(slides.length, slideWindowStart + SLIDE_WINDOW_SIZE);
+        // Adjust start if we hit the end
+        if (slideWindowEnd === slides.length) {
+          slideWindowStart = Math.max(0, slideWindowEnd - SLIDE_WINDOW_SIZE);
+        }
+      }
+    } else {
+      // No target, just ensure window is valid
+      slideWindowStart = Math.max(0, Math.min(slideWindowStart, slides.length - 1));
+      slideWindowEnd = Math.min(slides.length, slideWindowStart + SLIDE_WINDOW_SIZE);
+    }
+    
+    // Ensure we always have valid bounds
+    if (slideWindowEnd <= slideWindowStart && slides.length > 0) {
+      slideWindowStart = 0;
+      slideWindowEnd = Math.min(slides.length, SLIDE_WINDOW_SIZE);
+    }
+  }
+  
+  // Navigate to the previous page of slides
+  function goToPreviousPage() {
+    if (slideWindowStart <= 0) return;
+    slideWindowStart = Math.max(0, slideWindowStart - SLIDE_WINDOW_SIZE);
+    slideWindowEnd = Math.min(slides.length, slideWindowStart + SLIDE_WINDOW_SIZE);
+    renderTimelines();
+    // Select first slide in new window
+    if (slides.length > 0) {
+      selectSlide(slideWindowStart);
+    }
+  }
+  
+  // Navigate to the next page of slides
+  function goToNextPage() {
+    if (slideWindowEnd >= slides.length) return;
+    slideWindowStart = slideWindowEnd;
+    slideWindowEnd = Math.min(slides.length, slideWindowStart + SLIDE_WINDOW_SIZE);
+    renderTimelines();
+    // Select first slide in new window
+    if (slides.length > 0) {
+      selectSlide(slideWindowStart);
+    }
+  }
+  
+  // Update pagination indicator display
+  function updatePaginationIndicator() {
+    if (!pageIndicator || !paginationControls) return;
+    
+    if (slides.length === 0) {
+      paginationControls.style.display = 'none';
+      return;
+    }
+    
+    // Only show pagination if there are more slides than window size
+    if (slides.length <= SLIDE_WINDOW_SIZE) {
+      paginationControls.style.display = 'none';
+      return;
+    }
+    
+    paginationControls.style.display = 'flex';
+    
+    var displayStart = slideWindowStart + 1;
+    var displayEnd = Math.min(slideWindowEnd, slides.length);
+    pageIndicator.textContent = displayStart + '-' + displayEnd + ' of ' + slides.length;
+    
+    // Update button states
+    if (pagePrevBtn) pagePrevBtn.disabled = slideWindowStart <= 0;
+    if (pageNextBtn) pageNextBtn.disabled = slideWindowEnd >= slides.length;
+  }
+  
+  function renderSlidesTimeline() {
+    slidesTimeline.innerHTML = "";
+    
+    // Update slide window bounds
+    updateSlideWindow();
+    
+    // Clear any fixed width - let CSS handle the layout
+    slidesTimeline.style.minWidth = "";
+    
+    // Calculate which slides to fully render within the window
+    var visibleRange = calculateVisibleSlideRange();
+    renderedSlideRange = visibleRange;
+    
+    // Add initial drop indicator
+    slidesTimeline.appendChild(createDropIndicator(slideWindowStart));
+    
+    // Only render slides within the pagination window
+    for (var i = slideWindowStart; i < slideWindowEnd && i < slides.length; i++) {
+      var slide = slides[i];
+      var isInBuffer = i >= visibleRange.start && i <= visibleRange.end;
+      var block;
+      
+      if (isInBuffer) {
+        // Fully render slides within the buffer
+        block = createSlideBlock(slide, i);
+      } else {
+        // Use lightweight placeholder for slides outside the buffer
+        block = createSlidePlaceholder(i);
+      }
+      
+      slidesTimeline.appendChild(block);
+      
+      // Add drop indicator after each slide
+      slidesTimeline.appendChild(createDropIndicator(i + 1));
+    }
+    
+    // Update pagination indicator
+    updatePaginationIndicator();
+  }
+  
+  // Update only the slides that need to change when scrolling
+  function updateVisibleSlides() {
+    if (slides.length === 0) return;
+    
+    var newRange = calculateVisibleSlideRange();
+    
+    // Skip if range hasn't changed significantly
+    if (newRange.start === renderedSlideRange.start && newRange.end === renderedSlideRange.end) {
+      return;
+    }
+    
+    // Find slides that need to be upgraded (placeholder -> full)
+    var slidesToUpgrade = [];
+    for (var i = newRange.start; i <= newRange.end; i++) {
+      if (i < renderedSlideRange.start || i > renderedSlideRange.end) {
+        slidesToUpgrade.push(i);
+      }
+    }
+    
+    // Find slides that can be downgraded (full -> placeholder)
+    var slidesToDowngrade = [];
+    for (var j = renderedSlideRange.start; j <= renderedSlideRange.end; j++) {
+      if (j < newRange.start || j > newRange.end) {
+        slidesToDowngrade.push(j);
+      }
+    }
+    
+    // Perform upgrades
+    slidesToUpgrade.forEach(function(index) {
+      var placeholder = slidesTimeline.querySelector('.slide-block[data-index="' + index + '"][data-placeholder="true"]');
+      if (placeholder && slides[index]) {
+        var fullBlock = createSlideBlock(slides[index], index);
+        placeholder.parentNode.replaceChild(fullBlock, placeholder);
+      }
+    });
+    
+    // Perform downgrades
+    slidesToDowngrade.forEach(function(index) {
+      var fullBlock = slidesTimeline.querySelector('.slide-block[data-index="' + index + '"]:not([data-placeholder="true"])');
+      if (fullBlock) {
+        var placeholder = createSlidePlaceholder(index);
+        fullBlock.parentNode.replaceChild(placeholder, fullBlock);
+      }
+    });
+    
+    renderedSlideRange = newRange;
+  }
+  
+  // Generate thumbnail from video's first frame
+  function generateVideoThumbnail(src, callback) {
+    var video = document.createElement("video");
+    video.crossOrigin = "anonymous";
+    video.muted = true;
+    video.src = src;
+    
+    video.addEventListener("loadeddata", function() {
+      video.currentTime = 0.1; // Seek to 0.1s to avoid blank frames
+    });
+    
+    video.addEventListener("seeked", function() {
+      try {
+        var canvas = document.createElement("canvas");
+        canvas.width = 100;
+        canvas.height = 75;
+        var ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        callback(canvas.toDataURL("image/jpeg", 0.6));
+      } catch (e) {
+        callback(null);
+      }
+    });
+    
+    video.addEventListener("error", function() {
+      callback(null);
+    });
+  }
+  
+  function createDropIndicator(insertIndex) {
+    var indicator = document.createElement("div");
+    indicator.className = "drop-indicator";
+    indicator.dataset.insertIndex = insertIndex;
+    
+    indicator.addEventListener("dragover", function(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      if (draggedIndex !== null) {
+        // Don't show indicator right before or after the dragged item
+        if (insertIndex !== draggedIndex && insertIndex !== draggedIndex + 1) {
+          indicator.classList.add("visible");
+        }
+      }
+    });
+    
+    indicator.addEventListener("dragleave", function() {
+      indicator.classList.remove("visible");
+    });
+    
+    indicator.addEventListener("drop", function(e) {
+      e.preventDefault();
+      indicator.classList.remove("visible");
+      if (draggedIndex !== null) {
+        var targetIndex = insertIndex;
+        // Adjust target if dragging from before the drop point
+        if (draggedIndex < insertIndex) {
+          targetIndex = insertIndex - 1;
+        }
+        if (draggedIndex !== targetIndex) {
+          moveSlide(draggedIndex, targetIndex);
+        }
+      }
+    });
+    
+    return indicator;
+  }
+  
+  function clearAllDropIndicators() {
+    document.querySelectorAll(".drop-indicator").forEach(function(ind) {
+      ind.classList.remove("visible");
+    });
+  }
+  
+  function renderAudioTimeline() {
+    audioTimeline.innerHTML = "";
+    if (!slides.length) return;
+    
+    // Calculate windowed slide count for width
+    var windowedSlideCount = slideWindowEnd - slideWindowStart;
+    // Width matches slides: each slide block is 100px + 6px gap, plus drop indicators
+    var timelineWidth = windowedSlideCount * BLOCK_WIDTH;
+    
+    // Set explicit width so absolute positioning works correctly
+    audioTimeline.style.width = timelineWidth + "px";
+    
+    audioTracks.forEach(function(track, i) {
+      var trackStart = Math.max(0, track.startSlide);
+      var trackEnd = Math.min(slides.length - 1, track.endSlide);
+      
+      // Check if this audio track overlaps with the current window
+      if (trackEnd < slideWindowStart || trackStart >= slideWindowEnd) {
+        // Track is entirely outside the current window - don't render
+        return;
+      }
+      
+      // Clip track to window bounds for positioning
+      var visibleStart = Math.max(trackStart, slideWindowStart);
+      var visibleEnd = Math.min(trackEnd, slideWindowEnd - 1);
+      
+      // Calculate position relative to window start
+      var relativeStart = visibleStart - slideWindowStart;
+      var relativeEnd = visibleEnd - slideWindowStart;
+      
+      var el = document.createElement("div");
+      el.className = "audio-track" + (i === selectedAudioIndex ? " selected" : "");
+      el.dataset.index = i;
+      
+      // Position relative to the windowed view (match slide block positions)
+      el.style.left = (relativeStart * BLOCK_WIDTH + 4) + "px";
+      el.style.width = Math.max(50, (relativeEnd - relativeStart + 1) * BLOCK_WIDTH - 20) + "px";
+      
+      // Add visual indicator if track extends beyond visible window
+      var extendsLeft = trackStart < slideWindowStart;
+      var extendsRight = trackEnd >= slideWindowEnd;
+      
+      var filename = track.src.split('/').pop();
+      var leftArrow = extendsLeft ? '<span class="audio-extends">&#171;</span>' : '';
+      var rightArrow = extendsRight ? '<span class="audio-extends">&#187;</span>' : '';
+      el.innerHTML = leftArrow + '<span class="audio-icon">🔊</span><span class="audio-label">' + filename + '</span>' + rightArrow;
+      el.addEventListener("click", function() { selectAudioTrack(i); });
+      audioTimeline.appendChild(el);
+    });
+  }
+  
+  // Navigation controls
+  function updateNavButtons() {
+    navFirstBtn.disabled = slides.length === 0 || selectedSlideIndex === 0;
+    navPrevBtn.disabled = slides.length === 0 || selectedSlideIndex <= 0;
+    navNextBtn.disabled = slides.length === 0 || selectedSlideIndex >= slides.length - 1;
+    navLastBtn.disabled = slides.length === 0 || selectedSlideIndex === slides.length - 1;
+  }
+  
+  function moveSlide(from, to) {
+    if (to < 0 || to >= slides.length || from === to) return;
+    var slide = slides.splice(from, 1)[0];
+    slides.splice(to, 0, slide);
+    selectedSlideIndex = to;
+    // Ensure window includes the target position
+    updateSlideWindow(to);
+    renderTimelines();
+    scrollToSlide(to);
+    saveToLocalStorage();
+  }
+  
+  navFirstBtn.addEventListener("click", function() { if (slides.length) selectSlide(0); });
+  navPrevBtn.addEventListener("click", function() { if (selectedSlideIndex > 0) selectSlide(selectedSlideIndex - 1); });
+  navNextBtn.addEventListener("click", function() { if (selectedSlideIndex < slides.length - 1) selectSlide(selectedSlideIndex + 1); });
+  navLastBtn.addEventListener("click", function() { if (slides.length) selectSlide(slides.length - 1); });
+  
+  // Pagination button event listeners
+  if (pagePrevBtn) pagePrevBtn.addEventListener("click", goToPreviousPage);
+  if (pageNextBtn) pageNextBtn.addEventListener("click", goToNextPage);
+  
+  function scrollToSlide(index) {
+    var block = slidesTimeline.querySelector('[data-index="' + index + '"]');
+    if (block) block.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }
+
+  // Selection
+  function selectSlide(index) {
+    selectedSlideIndex = index;
+    selectedAudioIndex = -1;
+    
+    // Check if selected slide is outside current pagination window
+    var needsWindowShift = index < slideWindowStart || index >= slideWindowEnd;
+    if (needsWindowShift && slides.length > 0) {
+      // Shift window to include the selected slide
+      updateSlideWindow(index);
+      renderTimelines();
+    }
+    
+    // Update selection using data-index (works correctly with virtualized rendering)
+    document.querySelectorAll(".slide-block").forEach(function(b) {
+      var blockIndex = parseInt(b.dataset.index, 10);
+      b.classList.toggle("selected", blockIndex === index);
+    });
+    document.querySelectorAll(".audio-track").forEach(function(t) { t.classList.remove("selected"); });
+    
+    // If the selected slide is a placeholder, upgrade it to a full slide block
+    var selectedBlock = slidesTimeline.querySelector('.slide-block[data-index="' + index + '"]');
+    if (selectedBlock && selectedBlock.dataset.placeholder === "true" && slides[index]) {
+      var fullBlock = createSlideBlock(slides[index], index);
+      fullBlock.classList.add("selected");
+      selectedBlock.parentNode.replaceChild(fullBlock, selectedBlock);
+    }
+    
+    slideEditor.style.display = "block";
+    audioEditor.style.display = "none";
+    editorPlaceholder.style.display = "none";
+    slideForm.style.display = "flex";
+    
+    // Hide subtitle settings if open
+    var subtitleSettingsEditor = document.getElementById("subtitle-settings-editor");
+    if (subtitleSettingsEditor) subtitleSettingsEditor.style.display = "none";
+    
+    slidePositionBadge.textContent = "Slide " + (index + 1) + " of " + slides.length;
+    slidePositionBadge.style.display = "inline-block";
+    
+    var slide = slides[index];
+    slideTypeSelect.value = slide.type;
+    slideSrcInput.value = slide.src || "";
+    slideNotesInput.value = (slide.notes || "").replace(/^Slide\s*\d+\s*:\s*/i, "");
+    slideLoopInput.checked = !!slide.loop;
+    slideZoompanInput.checked = !!slide.zoompan;
+    placeholderTitleInput.value = slide.title || "";
+    placeholderTextInput.value = slide.text || "";
+    placeholderColorInput.value = slide.backgroundColor || "#333333";
+    
+    // Load video-specific settings
+    if (slide.type === "video") {
+      if (videoVolumeSlider && videoVolumeValue) {
+        var volume = slide.volume !== undefined ? slide.volume : 100;
+        videoVolumeSlider.value = volume;
+        videoVolumeValue.textContent = volume + "%";
+      }
+      if (slideAutoAdvanceInput) {
+        slideAutoAdvanceInput.checked = !!slide.autoAdvance;
+      }
+    }
+    
+    // Load placeholder-specific settings
+    if (slide.type === "placeholder") {
+      if (placeholderTimedAdvanceInput) {
+        placeholderTimedAdvanceInput.checked = !!slide.timedAdvance;
+      }
+      if (placeholderDurationInput) {
+        placeholderDurationInput.value = slide.advanceDuration || 5000;
+      }
+      if (placeholderDurationGroup) {
+        placeholderDurationGroup.style.display = slide.timedAdvance ? "block" : "none";
+      }
+    }
+    
+    updateFormVisibility(slide.type);
+    updatePreview(slide);
+    updateNavButtons();
+    hideAudioPreview();
+  }
+  
+  function selectAudioTrack(index) {
+    selectedAudioIndex = index;
+    selectedSlideIndex = -1;
+    
+    document.querySelectorAll(".slide-block").forEach(function(b) { b.classList.remove("selected"); });
+    document.querySelectorAll(".audio-track").forEach(function(t, i) { t.classList.toggle("selected", i === index); });
+    
+    slideEditor.style.display = "none";
+    audioEditor.style.display = "block";
+    slidePositionBadge.style.display = "none";
+    
+    // Hide subtitle settings if open
+    var subtitleSettingsEditor = document.getElementById("subtitle-settings-editor");
+    if (subtitleSettingsEditor) subtitleSettingsEditor.style.display = "none";
+    
+    updateNavButtons();
+    
+    var track = audioTracks[index];
+    audioSrcInput.value = track.src || "";
+    audioStartInput.value = track.startSlide + 1;
+    audioEndInput.value = track.endSlide + 1;
+    audioStartInput.max = slides.length;
+    audioEndInput.max = slides.length;
+    audioLoopInput.checked = !!track.loop;
+    
+    // Show audio preview in main preview area
+    previewContainer.innerHTML = '<p class="preview-placeholder">🔊 Audio Track</p>';
+    audioPreview.src = track.src || "";
+    audioPreview.load();
+    audioPreviewContainer.style.display = "block";
+  }
+  
+  // Update audio preview when source changes
+  audioSrcInput.addEventListener("change", function() {
+    audioPreview.src = audioSrcInput.value;
+    audioPreview.load();
+  });
+  
+  function updateFormVisibility(type) {
+    srcGroup.style.display = type === "placeholder" ? "none" : "flex";
+    placeholderGroup.style.display = type === "placeholder" ? "flex" : "none";
+    loopGroup.style.display = type === "placeholder" ? "none" : "flex";
+    zoompanGroup.style.display = type === "image" ? "flex" : "none";
+    
+    // Show video-specific controls only for video slides
+    if (videoVolumeGroup) {
+      videoVolumeGroup.style.display = type === "video" ? "flex" : "none";
+    }
+    if (autoAdvanceGroup) {
+      autoAdvanceGroup.style.display = type === "video" ? "flex" : "none";
+    }
+    var editVideoGroup = document.getElementById("edit-video-group");
+    if (editVideoGroup) {
+      editVideoGroup.style.display = type === "video" ? "flex" : "none";
+    }
+  }
+  
+  slideTypeSelect.addEventListener("change", function() { updateFormVisibility(this.value); });
+  
+  // Video volume slider listener
+  if (videoVolumeSlider) {
+    videoVolumeSlider.addEventListener("input", function() {
+      videoVolumeValue.textContent = this.value + "%";
+    });
+  }
+  
+  // Placeholder timed advance checkbox listener
+  if (placeholderTimedAdvanceInput && placeholderDurationGroup) {
+    placeholderTimedAdvanceInput.addEventListener("change", function() {
+      placeholderDurationGroup.style.display = this.checked ? "block" : "none";
+    });
+  }
+  
+  function updatePreview(slide) {
+    previewContainer.innerHTML = "";
+    if (slide.type === "video") {
+      var v = document.createElement("video");
+      v.src = slide.src;
+      v.controls = true;
+      v.muted = true;
+      previewContainer.appendChild(v);
+    } else if (slide.type === "image") {
+      var img = document.createElement("img");
+      img.src = slide.src;
+      if (slide.zoompan) img.className = "zoompan";
+      previewContainer.appendChild(img);
+    } else {
+      var div = document.createElement("div");
+      div.className = "placeholder-preview";
+      div.style.backgroundColor = slide.backgroundColor || "#333";
+      var bodyText = slide.text ? '<p>' + slide.text + '</p>' : '';
+      div.innerHTML = '<h3>' + (slide.title || 'Placeholder') + '</h3>' + bodyText;
+      previewContainer.appendChild(div);
+    }
+  }
+  
+  // Save slide
+  slideForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    if (selectedSlideIndex < 0) return;
+    
+    var slide = slides[selectedSlideIndex];
+    slide.type = slideTypeSelect.value;
+    
+    if (slide.type === "placeholder") {
+      slide.title = placeholderTitleInput.value;
+      slide.text = placeholderTextInput.value;
+      slide.backgroundColor = placeholderColorInput.value;
+      // Save timed auto-advance settings
+      if (placeholderTimedAdvanceInput) {
+        slide.timedAdvance = placeholderTimedAdvanceInput.checked;
+      }
+      if (placeholderDurationInput) {
+        slide.advanceDuration = parseInt(placeholderDurationInput.value) || 5000;
+      }
+      delete slide.src; delete slide.loop; delete slide.zoompan; delete slide.volume; delete slide.autoAdvance;
+    } else if (slide.type === "image") {
+      slide.src = slideSrcInput.value;
+      slide.zoompan = slideZoompanInput.checked;
+      delete slide.title; delete slide.text; delete slide.backgroundColor; delete slide.loop; delete slide.volume; delete slide.autoAdvance; delete slide.timedAdvance; delete slide.advanceDuration;
+    } else {
+      // Video slide
+      slide.src = slideSrcInput.value;
+      slide.loop = slideLoopInput.checked;
+      // Save volume setting
+      if (videoVolumeSlider) {
+        slide.volume = parseInt(videoVolumeSlider.value);
+      }
+      // Save auto-advance setting
+      if (slideAutoAdvanceInput) {
+        slide.autoAdvance = slideAutoAdvanceInput.checked;
+      }
+      delete slide.title; delete slide.text; delete slide.backgroundColor; delete slide.zoompan; delete slide.timedAdvance; delete slide.advanceDuration;
+    }
+    slide.notes = slideNotesInput.value;
+    
+    renderTimelines();
+    updatePreview(slide);
+    selectSlide(selectedSlideIndex);
+    saveToLocalStorage();
+    
+    var btn = slideForm.querySelector(".save-btn");
+    btn.innerText = "✓ Saved";
+    btn.style.background = "#27ae60";
+    setTimeout(function() { btn.innerText = "Save"; btn.style.background = ""; }, 1200);
+  });
+  
+  // Save audio
+  audioForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    if (selectedAudioIndex < 0) return;
+    
+    var track = audioTracks[selectedAudioIndex];
+    track.src = audioSrcInput.value;
+    track.startSlide = Math.max(0, parseInt(audioStartInput.value) - 1);
+    track.endSlide = Math.max(track.startSlide, parseInt(audioEndInput.value) - 1);
+    track.loop = audioLoopInput.checked;
+    
+    renderAudioTimeline();
+    // NOTE: saveToLocalStorage() is called in the override handler below
+    // after volume/pauseSlides/fade settings are saved
+    
+    var btn = audioForm.querySelector(".save-btn");
+    btn.innerText = "✓ Saved";
+    btn.style.background = "#27ae60";
+    setTimeout(function() { btn.innerText = "Save"; btn.style.background = ""; }, 1200);
+  });
+
+  // Add slides
+  function addSlide(type) {
+    var slide = { type: type, notes: "" };
+    if (type === "video") { slide.src = "media/video/"; slide.loop = false; }
+    else if (type === "image") { slide.src = "media/"; }
+    else { slide.title = "Coming Soon"; slide.backgroundColor = "#333333"; }
+    
+    var idx = selectedSlideIndex >= 0 ? selectedSlideIndex + 1 : slides.length;
+    slides.splice(idx, 0, slide);
+    
+    // Shift window to include the new slide
+    updateSlideWindow(idx);
+    
+    renderTimelines();
+    selectSlide(idx);
+    saveToLocalStorage();
+    setTimeout(function() { scrollToSlide(idx); }, 50);
+  }
+  
+  addVideoBtn.addEventListener("click", function() { addSlide("video"); });
+  addImageBtn.addEventListener("click", function() { addSlide("image"); });
+  addPlaceholderBtn.addEventListener("click", function() { addSlide("placeholder"); });
+  
+  addAudioBtn.addEventListener("click", function() {
+    var start = selectedSlideIndex >= 0 ? selectedSlideIndex : 0;
+    audioTracks.push({
+      src: "media/audio/",
+      startSlide: start,
+      endSlide: Math.min(start + 5, slides.length - 1),
+      loop: false,
+      volume: 100,
+      pauseSlides: [],
+      fadeEnabled: false,
+      fadeIn: 0.5,
+      fadeOut: 0.5
+    });
+    renderAudioTimeline();
+    selectAudioTrack(audioTracks.length - 1);
+    saveToLocalStorage();
+  });
+  
+  // Delete
+  deleteSlideBtn.addEventListener("click", function() {
+    if (selectedSlideIndex < 0 || !confirm("Delete this slide?")) return;
+    slides.splice(selectedSlideIndex, 1);
+    if (!slides.length) {
+      selectedSlideIndex = -1;
+      slideWindowStart = 0;
+      slideWindowEnd = 0;
+      editorPlaceholder.style.display = "block";
+      slideForm.style.display = "none";
+      slidePositionBadge.style.display = "none";
+      previewContainer.innerHTML = '<p class="preview-placeholder">Select a slide to preview</p>';
+    } else {
+      selectedSlideIndex = Math.min(selectedSlideIndex, slides.length - 1);
+      // Ensure window bounds are valid after deletion
+      updateSlideWindow(selectedSlideIndex);
+      selectSlide(selectedSlideIndex);
+    }
+    renderTimelines();
+    saveToLocalStorage();
+  });
+  
+  deleteAudioBtn.addEventListener("click", function() {
+    if (selectedAudioIndex < 0 || !confirm("Delete this audio track?")) return;
+    audioTracks.splice(selectedAudioIndex, 1);
+    selectedAudioIndex = -1;
+    audioEditor.style.display = "none";
+    slideEditor.style.display = "block";
+    editorPlaceholder.style.display = "block";
+    slideForm.style.display = "none";
+    renderAudioTimeline();
+    saveToLocalStorage();
+  });
+
+  // Import/Export
+  exportBtn.addEventListener("click", function() {
+    var data = JSON.stringify({ slides: slides, audio: audioTracks }, null, 2);
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([data], { type: "application/json" }));
+    a.download = "data.json";
+    a.click();
+  });
+  
+  importBtn.addEventListener("click", function() { importInput.click(); });
+  
+  importInput.addEventListener("change", function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        var data = JSON.parse(ev.target.result);
+        slides = data.slides || data;
+        audioTracks = data.audio || [];
+        presentationSettings = data.settings || { subtitleSize: 100 };
+        selectedSlideIndex = -1;
+        selectedAudioIndex = -1;
+        // Reset pagination window to start
+        slideWindowStart = 0;
+        slideWindowEnd = Math.min(slides.length, SLIDE_WINDOW_SIZE);
+        editorPlaceholder.style.display = "block";
+        slideForm.style.display = "none";
+        audioEditor.style.display = "none";
+        slideEditor.style.display = "block";
+        slidePositionBadge.style.display = "none";
+        var subtitleSettingsEditor = document.getElementById("subtitle-settings-editor");
+        if (subtitleSettingsEditor) subtitleSettingsEditor.style.display = "none";
+        previewContainer.innerHTML = '<p class="preview-placeholder">Select a slide</p>';
+        renderTimelines();
+        applySubtitleSettings();
+        saveToLocalStorage();
+        alert("Imported!");
+      } catch (err) { alert("Error: " + err.message); }
+    };
+    reader.readAsText(file);
+    importInput.value = "";
+  });
+
+  // Presentation
+  window.addEventListener("message", function(e) {
+    if (e.data.type === "togglePause") togglePause();
+  });
+
+  function togglePause() {
+    if (window.currentMedia && window.currentMedia.tagName === "VIDEO") {
+      paused ? window.currentMedia.play() : window.currentMedia.pause();
+    }
+    paused = !paused;
+    for (var k in activeAudioElements) {
+      paused ? activeAudioElements[k].pause() : activeAudioElements[k].play().catch(function(){});
+    }
+    // Clear placeholder advance timer when pausing (user will need to manually advance or navigate)
+    if (paused && placeholderAdvanceTimer) {
+      clearTimeout(placeholderAdvanceTimer);
+      placeholderAdvanceTimer = null;
+    }
+    updatePresenterView();
+  }
+
+  function startPresentation() {
+    if (window.presentationStarted) return;
+    window.presentationStarted = true;
+    document.body.classList.add("present-mode");
+    loadSlide(currentSlideIndex);
+    
+    // Start subtitle system if enabled
+    if (window.subtitleSystem && window.subtitleSystem.isEnabled()) {
+      window.subtitleSystem.onPresentationStart();
+    }
+  }
+  window.startPresentation = startPresentation;
+
+  function loadSlide(index) {
+    // Clear any existing placeholder advance timer
+    if (placeholderAdvanceTimer) {
+      clearTimeout(placeholderAdvanceTimer);
+      placeholderAdvanceTimer = null;
+    }
+    
+    var container = document.getElementById("slide-content");
+    if (!container) {
+      // Fallback to presentation container if slide-content doesn't exist
+      container = document.getElementById("presentation");
+    }
+    container.innerHTML = "";
+    if (index < 0 || index >= slides.length) {
+      container.innerHTML = "<h1 style='color:white;'>End of Presentation</h1>";
+      return;
+    }
+    var slide = slides[index];
+    
+    if (slide.type === "image") {
+      var img = document.createElement("img");
+      img.src = slide.src;
+      if (slide.zoompan) img.className = "zoompan";
+      container.appendChild(img);
+      window.currentMedia = null;
+    } else if (slide.type === "video") {
+      var video = document.createElement("video");
+      video.src = slide.src;
+      video.autoplay = true;
+      if (slide.loop) video.loop = true;
+      // Apply volume setting from JSON (0-200% mapped to 0-1 for HTML5)
+      var volume = slide.volume !== undefined ? slide.volume : 100;
+      video.volume = Math.min(1, volume / 100);
+      container.appendChild(video);
+      window.currentMedia = video;
+      video.addEventListener("loadeddata", function() { video.play().catch(function(){}); });
+      
+      // Auto-advance to next slide when video ends (if enabled and not looping)
+      if (slide.autoAdvance && !slide.loop) {
+        video.addEventListener("ended", function() {
+          // Only advance if we're still on this slide and presentation is running
+          if (window.presentationStarted && !paused && currentSlideIndex === index) {
+            advanceSlide();
+          }
+        });
+      }
+    } else {
+      var div = document.createElement("div");
+      div.className = "placeholder-slide";
+      div.style.backgroundColor = slide.backgroundColor || "#333";
+      var bodyText = slide.text ? '<p>' + slide.text + '</p>' : '';
+      div.innerHTML = '<h1>' + (slide.title || 'Placeholder') + '</h1>' + bodyText;
+      container.appendChild(div);
+      window.currentMedia = null;
+      
+      // Auto-advance after timeout (if enabled)
+      if (slide.timedAdvance) {
+        var duration = slide.advanceDuration || 5000;
+        var attemptAdvance = function() {
+          // Only advance if we're still on this slide and presentation is running
+          if (window.presentationStarted && !paused && currentSlideIndex === index) {
+            // If canChangeSlide is false (e.g., cooldown from previous slide change),
+            // reschedule the advance attempt instead of silently failing
+            if (!canChangeSlide) {
+              placeholderAdvanceTimer = setTimeout(attemptAdvance, 100);
+              return;
+            }
+            advanceSlide();
+          }
+        };
+        placeholderAdvanceTimer = setTimeout(attemptAdvance, duration);
+      }
+    }
+    updatePresenterView();
+    updateAudio();
+  }
+
+  function updateAudio() {
+    for (var i = 0; i < audioTracks.length; i++) {
+      var track = audioTracks[i];
+      if (currentSlideIndex >= track.startSlide && currentSlideIndex <= track.endSlide) {
+        if (!activeAudioElements[i]) {
+          var el = new Audio(track.src);
+          el.loop = !!track.loop;
+          activeAudioElements[i] = el;
+          if (!paused) el.play().catch(function(){});
+        }
+      } else if (activeAudioElements[i]) {
+        activeAudioElements[i].pause();
+        activeAudioElements[i].currentTime = 0;
+        delete activeAudioElements[i];
+      }
+    }
+  }
+
+  function advanceSlide() {
+    if (!window.presentationStarted || !canChangeSlide) return;
+    canChangeSlide = false;
+    if (currentSlideIndex < slides.length - 1) { currentSlideIndex++; loadSlide(currentSlideIndex); }
+    setTimeout(function() { canChangeSlide = true; }, 500);
+  }
+  window.advanceSlide = advanceSlide;
+
+  function previousSlide() {
+    if (!window.presentationStarted || !canChangeSlide) return;
+    canChangeSlide = false;
+    if (currentSlideIndex > 0) { currentSlideIndex--; loadSlide(currentSlideIndex); }
+    setTimeout(function() { canChangeSlide = true; }, 500);
+  }
+  window.previousSlide = previousSlide;
+
+  // Fullscreen support (with webkit prefix for Safari)
+  function requestFullscreenCompat(el) {
+    if (el.requestFullscreen) {
+      return el.requestFullscreen();
+    } else if (el.webkitRequestFullscreen) {
+      return el.webkitRequestFullscreen();
+    } else if (el.msRequestFullscreen) {
+      return el.msRequestFullscreen();
+    }
+    return Promise.reject(new Error("Fullscreen not supported"));
+  }
+  
+  function exitFullscreenCompat() {
+    if (document.exitFullscreen) {
+      return document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      return document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      return document.msExitFullscreen();
+    }
+    return Promise.reject(new Error("Exit fullscreen not supported"));
+  }
+  
+  function getFullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+  }
+  
+  // Create fullscreen prompt overlay (shown when presenter requests fullscreen)
+  var fullscreenOverlay = document.createElement("div");
+  fullscreenOverlay.id = "fullscreen-prompt-overlay";
+  fullscreenOverlay.innerHTML = '<div class="fullscreen-prompt-content">' +
+    '<div class="fullscreen-prompt-icon">⛶</div>' +
+    '<h2>Click here to enter Full Screen</h2>' +
+    '<p>Click anywhere on this window to go fullscreen</p>' +
+    '<button class="fullscreen-prompt-cancel">Cancel</button>' +
+    '</div>';
+  fullscreenOverlay.style.display = "none";
+  document.body.appendChild(fullscreenOverlay);
+  
+  // Handle click on overlay to enter fullscreen
+  fullscreenOverlay.addEventListener("click", function(e) {
+    if (e.target.classList.contains("fullscreen-prompt-cancel")) {
+      hideFullscreenPrompt();
+      return;
+    }
+    var presentationEl = document.getElementById("presentation");
+    if (presentationEl) {
+      requestFullscreenCompat(presentationEl).then(function() {
+        hideFullscreenPrompt();
+      }).catch(function(err) {
+        console.warn("Fullscreen request failed:", err);
+        hideFullscreenPrompt();
+      });
+    }
+  });
+  
+  function showFullscreenPrompt() {
+    fullscreenOverlay.style.display = "flex";
+    window.focus(); // Bring the presentation window to front
+  }
+  window.showFullscreenPrompt = showFullscreenPrompt;
+  
+  function hideFullscreenPrompt() {
+    fullscreenOverlay.style.display = "none";
+  }
+  window.hideFullscreenPrompt = hideFullscreenPrompt;
+  
+  // Exit fullscreen (can be called directly)
+  function exitPresentationFullscreen() {
+    if (getFullscreenElement()) {
+      exitFullscreenCompat().catch(function() {});
+    }
+  }
+  window.exitPresentationFullscreen = exitPresentationFullscreen;
+  
+  // Check if presentation is currently fullscreen
+  function isPresentationFullscreen() {
+    return !!getFullscreenElement();
+  }
+  window.isPresentationFullscreen = isPresentationFullscreen;
+  
+  // Notify presenter view when fullscreen state changes
+  function onFullscreenChange() {
+    if (presenterWindow && !presenterWindow.closed) {
+      presenterWindow.postMessage({
+        type: "fullscreenChange",
+        isFullscreen: !!getFullscreenElement()
+      }, "*");
+    }
+  }
+  document.addEventListener("fullscreenchange", onFullscreenChange);
+  document.addEventListener("webkitfullscreenchange", onFullscreenChange);
+  document.addEventListener("msfullscreenchange", onFullscreenChange);
+
+  function updatePresenterView() {
+    if (presenterWindow && !presenterWindow.closed) {
+      // Only send slides within the presenter buffer to reduce memory usage
+      var bufferStart = Math.max(0, currentSlideIndex - PRESENTER_BUFFER_SIZE);
+      var bufferEnd = Math.min(slides.length - 1, currentSlideIndex + PRESENTER_BUFFER_SIZE);
+      var bufferedSlides = slides.slice(bufferStart, bufferEnd + 1);
+      
+      presenterWindow.postMessage({
+        type: "update",
+        currentSlideIndex: currentSlideIndex,
+        slides: bufferedSlides,
+        slideOffset: bufferStart,  // Tell presenter which index the buffer starts at
+        totalSlides: slides.length,
+        paused: paused
+      }, "*");
+    }
+  }
+
+  document.getElementById("startBtn").addEventListener("click", startPresentation);
+  
+  document.getElementById("presenterBtn").addEventListener("click", function() {
+    if (!presenterWindow || presenterWindow.closed) {
+      // Open presenter window as large as possible
+      var width = Math.min(screen.availWidth - 50, 1600);
+      var height = Math.min(screen.availHeight - 50, 1000);
+      var left = Math.round((screen.availWidth - width) / 2);
+      var top = Math.round((screen.availHeight - height) / 2);
+      presenterWindow = window.open(
+        window.location.href + "?presenter",
+        "PresenterView",
+        "width=" + width + ",height=" + height + ",left=" + left + ",top=" + top
+      );
+    } else {
+      presenterWindow.focus();
+    }
+  });
+
+  document.addEventListener("keydown", function(e) {
+    if (!window.presentationStarted) return;
+    if (e.key === "ArrowRight") advanceSlide();
+    else if (e.key === "ArrowLeft") previousSlide();
+    else if (e.key === "Escape") switchToEditMode();
+  });
+
+  // ============================================
+  // AI VIDEO GENERATION FEATURE
+  // ============================================
+  
+  var VEO_API_KEY_STORAGE = "veo_api_key";
+  var generateVideoBtn = document.getElementById("generateVideoBtn");
+  
+  // Modal Elements
+  var apiKeyDialog = document.getElementById("api-key-dialog");
+  var apiKeyInput = document.getElementById("api-key-input");
+  var apiKeySaveBtn = document.getElementById("api-key-save");
+  var apiKeyCancelBtn = document.getElementById("api-key-cancel");
+  
+  var videoGenModal = document.getElementById("video-gen-modal");
+  var videoGenCloseBtn = document.getElementById("video-gen-close");
+  var vgIdleState = document.getElementById("vg-idle-state");
+  var vgLoadingState = document.getElementById("vg-loading-state");
+  var vgPreviewState = document.getElementById("vg-preview-state");
+  var vgErrorState = document.getElementById("vg-error-state");
+  var vgLoadingStatus = document.getElementById("vg-loading-status");
+  var vgErrorMessage = document.getElementById("vg-error-message");
+  var vgPreviewVideo = document.getElementById("vg-preview-video");
+  
+  var vgPrompt = document.getElementById("vg-prompt");
+  var vgModel = document.getElementById("vg-model");
+  var vgAspect = document.getElementById("vg-aspect");
+  var vgResolution = document.getElementById("vg-resolution");
+  var vgGenerateBtn = document.getElementById("vg-generate-btn");
+  var vgRegenerateBtn = document.getElementById("vg-regenerate-btn");
+  var vgConfirmBtn = document.getElementById("vg-confirm-btn");
+  var vgTryAgainBtn = document.getElementById("vg-try-again-btn");
+  
+  var addToDeckModal = document.getElementById("add-to-deck-modal");
+  var addDeckFilename = document.getElementById("add-deck-filename");
+  var addDeckDoneBtn = document.getElementById("add-deck-done-btn");
+  
+  var convertToVideoBtn = document.getElementById("convertToVideoBtn");
+  
+  var currentVideoBlob = null;
+  var currentVideoUrl = null;
+  var pendingGenerateCallback = null;
+  var convertingPlaceholderIndex = -1; // Track which placeholder we're converting
+  var convertingPlaceholderNotes = ""; // Store the notes from the placeholder
+  
+  // API Key Management
+  function getApiKey() {
+    return localStorage.getItem(VEO_API_KEY_STORAGE);
+  }
+  
+  function setApiKey(key) {
+    localStorage.setItem(VEO_API_KEY_STORAGE, key);
+  }
+  
+  function hasApiKey() {
+    var key = getApiKey();
+    return key && key.length > 0;
+  }
+  
+  function showApiKeyDialog(callback) {
+    pendingGenerateCallback = callback;
+    apiKeyInput.value = getApiKey() || "";
+    apiKeyDialog.style.display = "flex";
+    apiKeyInput.focus();
+  }
+  
+  function hideApiKeyDialog() {
+    apiKeyDialog.style.display = "none";
+    pendingGenerateCallback = null;
+  }
+  
+  apiKeySaveBtn.addEventListener("click", function() {
+    var key = apiKeyInput.value.trim();
+    if (key) {
+      setApiKey(key);
+      hideApiKeyDialog();
+      if (pendingGenerateCallback) {
+        pendingGenerateCallback();
+      }
+    } else {
+      alert("Please enter a valid API key.");
+    }
+  });
+  
+  apiKeyCancelBtn.addEventListener("click", hideApiKeyDialog);
+  
+  apiKeyInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      apiKeySaveBtn.click();
+    }
+  });
+  
+  // Video Generation Modal
+  function showVideoGenModal(initialPrompt) {
+    setVideoGenState("idle");
+    vgPrompt.value = initialPrompt || "";
+    videoGenModal.style.display = "flex";
+    vgPrompt.focus();
+  }
+  
+  function hideVideoGenModal() {
+    // Stop video playback
+    if (vgPreviewVideo) {
+      vgPreviewVideo.pause();
+      vgPreviewVideo.currentTime = 0;
+      vgPreviewVideo.src = "";
+    }
+    
+    videoGenModal.style.display = "none";
+    if (currentVideoUrl) {
+      URL.revokeObjectURL(currentVideoUrl);
+      currentVideoUrl = null;
+    }
+    currentVideoBlob = null;
+    
+    // Reset placeholder conversion state
+    convertingPlaceholderIndex = -1;
+    convertingPlaceholderNotes = "";
+  }
+  
+  function setVideoGenState(state) {
+    // Stop video playback when leaving preview state
+    if (state !== "preview" && vgPreviewVideo) {
+      vgPreviewVideo.pause();
+      vgPreviewVideo.currentTime = 0;
+    }
+    
+    vgIdleState.style.display = state === "idle" ? "block" : "none";
+    vgLoadingState.style.display = state === "loading" ? "block" : "none";
+    vgPreviewState.style.display = state === "preview" ? "block" : "none";
+    vgErrorState.style.display = state === "error" ? "block" : "none";
+  }
+  
+  videoGenCloseBtn.addEventListener("click", hideVideoGenModal);
+  
+  videoGenModal.addEventListener("click", function(e) {
+    if (e.target === videoGenModal) {
+      hideVideoGenModal();
+    }
+  });
+  
+  // Generate Video Button Click
+  generateVideoBtn.addEventListener("click", function() {
+    // Reset placeholder conversion state for new video
+    convertingPlaceholderIndex = -1;
+    convertingPlaceholderNotes = "";
+    
+    if (!hasApiKey()) {
+      showApiKeyDialog(function() { showVideoGenModal(); });
+    } else {
+      showVideoGenModal();
+    }
+  });
+  
+  // Convert Placeholder to Video Button Click
+  convertToVideoBtn.addEventListener("click", function() {
+    if (selectedSlideIndex < 0) return;
+    
+    var slide = slides[selectedSlideIndex];
+    if (slide.type !== "placeholder") return;
+    
+    // Store the placeholder info for later
+    convertingPlaceholderIndex = selectedSlideIndex;
+    convertingPlaceholderNotes = slide.notes || "";
+    
+    // Build a suggested prompt from the placeholder content
+    var promptParts = [];
+    if (slide.title) promptParts.push(slide.title);
+    if (slide.text) promptParts.push(slide.text);
+    var suggestedPrompt = promptParts.join(". ");
+    
+    if (!hasApiKey()) {
+      showApiKeyDialog(function() { showVideoGenModal(suggestedPrompt); });
+    } else {
+      showVideoGenModal(suggestedPrompt);
+    }
+  });
+  
+  // Video Generation Service
+  async function generateAIVideo(params) {
+    var apiKey = getApiKey();
+    if (!apiKey) {
+      throw new Error("No API key configured");
+    }
+    
+    // Build request body for predictLongRunning (the correct endpoint for video generation)
+    // Based on the Veo API structure used by the Google GenAI SDK
+    var requestBody = {
+      instances: [{
+        prompt: params.prompt
+      }],
+      parameters: {
+        sampleCount: 1,
+        aspectRatio: params.aspectRatio,
+        resolution: params.resolution
+      }
+    };
+    
+    console.log("Starting video generation with params:", requestBody);
+    
+    // Use predictLongRunning endpoint which is the correct one for video generation
+    var generateUrl = "https://generativelanguage.googleapis.com/v1beta/models/" + params.model + ":predictLongRunning?key=" + apiKey;
+    console.log("Calling endpoint:", generateUrl);
+    
+    var generateResponse = await fetch(generateUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(requestBody)
+    });
+    
+    if (!generateResponse.ok) {
+      var errorData = await generateResponse.json().catch(function() { return {}; });
+      var errorMsg = errorData.error?.message || generateResponse.statusText;
+      console.error("Generation request failed:", generateResponse.status, errorMsg, errorData);
+      
+      if (errorMsg.includes("Requested entity was not found") || 
+          errorMsg.includes("API_KEY_INVALID") ||
+          errorMsg.includes("API key not valid") ||
+          generateResponse.status === 403 ||
+          generateResponse.status === 404) {
+        throw new Error("API key is invalid, lacks permissions, or the Veo model is not available. Please check your API key and ensure billing is enabled. Error: " + errorMsg);
+      }
+      throw new Error(errorMsg);
+    }
+    
+    var operation = await generateResponse.json();
+    console.log("Video generation operation started:", operation);
+    
+    // Poll for completion
+    var operationName = operation.name;
+    var maxAttempts = 120; // 20 minutes max
+    var attempts = 0;
+    
+    while (attempts < maxAttempts) {
+      await new Promise(function(resolve) { setTimeout(resolve, 10000); }); // Wait 10 seconds
+      attempts++;
+      
+      vgLoadingStatus.textContent = "Generating...";
+      
+      var statusResponse = await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/" + operationName + "?key=" + apiKey
+      );
+      
+      if (!statusResponse.ok) {
+        throw new Error("Failed to check generation status: " + statusResponse.statusText);
+      }
+      
+      var statusData = await statusResponse.json();
+      console.log("Generation status:", statusData);
+      
+      if (statusData.done) {
+        if (statusData.error) {
+          throw new Error(statusData.error.message || "Generation failed");
+        }
+        
+        // Handle different response formats
+        var videoUri = null;
+        var response = statusData.response;
+        
+        // Format 1: predictLongRunning response with generateVideoResponse
+        if (response?.generateVideoResponse?.generatedSamples) {
+          var samples = response.generateVideoResponse.generatedSamples;
+          if (samples.length > 0 && samples[0].video?.uri) {
+            videoUri = samples[0].video.uri;
+            console.log("Found video URI in generateVideoResponse.generatedSamples");
+          }
+        }
+        
+        // Format 2: SDK-style with generatedVideos
+        if (!videoUri && response?.generatedVideos) {
+          var videos = response.generatedVideos;
+          if (videos.length > 0 && videos[0].video?.uri) {
+            videoUri = videos[0].video.uri;
+            console.log("Found video URI in generatedVideos");
+          }
+        }
+        
+        // Format 3: Predict-style with predictions
+        if (!videoUri && response?.predictions) {
+          var predictions = response.predictions;
+          if (predictions.length > 0) {
+            var firstPrediction = predictions[0];
+            videoUri = firstPrediction.videoUri || 
+                       firstPrediction.video?.uri || 
+                       firstPrediction.uri;
+            if (videoUri) {
+              console.log("Found video URI in predictions");
+            }
+            
+            // Some models return base64 encoded video
+            if (!videoUri && firstPrediction.bytesBase64Encoded) {
+              console.log("Found base64 encoded video");
+              var byteString = atob(firstPrediction.bytesBase64Encoded);
+              var ab = new ArrayBuffer(byteString.length);
+              var ia = new Uint8Array(ab);
+              for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+              }
+              var videoBlob = new Blob([ab], { type: 'video/mp4' });
+              var objectUrl = URL.createObjectURL(videoBlob);
+              return { blob: videoBlob, objectUrl: objectUrl };
+            }
+          }
+        }
+        
+        if (!videoUri) {
+          console.error("Could not find video URI in response:", statusData);
+          throw new Error("Generated video is missing a URI. Response format may have changed.");
+        }
+        
+        // Fetch the video
+        videoUri = decodeURIComponent(videoUri);
+        console.log("Fetching video from:", videoUri);
+        
+        // Add API key if URL is from Google
+        var fetchUrl = videoUri;
+        if (videoUri.includes("googleapis.com") && !videoUri.includes("key=")) {
+          fetchUrl = videoUri + (videoUri.includes("?") ? "&" : "?") + "key=" + apiKey;
+        }
+        
+        var videoResponse = await fetch(fetchUrl);
+        if (!videoResponse.ok) {
+          throw new Error("Failed to download video: " + videoResponse.statusText);
+        }
+        
+        var videoBlob = await videoResponse.blob();
+        var objectUrl = URL.createObjectURL(videoBlob);
+        
+        return {
+          blob: videoBlob,
+          objectUrl: objectUrl
+        };
+      }
+    }
+    
+    throw new Error("Video generation timed out. Please try again.");
+  }
+  
+  // Generate Button Handler
+  vgGenerateBtn.addEventListener("click", function() {
+    var prompt = vgPrompt.value.trim();
+    if (!prompt) {
+      alert("Please enter a prompt describing the video you want to generate.");
+      vgPrompt.focus();
+      return;
+    }
+    
+    if (!hasApiKey()) {
+      showApiKeyDialog(function() {
+        vgGenerateBtn.click();
+      });
+      return;
+    }
+    
+    startVideoGeneration({
+      prompt: prompt,
+      model: vgModel.value,
+      aspectRatio: vgAspect.value,
+      resolution: vgResolution.value
+    });
+  });
+  
+  async function startVideoGeneration(params) {
+    setVideoGenState("loading");
+    vgLoadingStatus.textContent = "Submitting generation request...";
+    
+    try {
+      var result = await generateAIVideo(params);
+      currentVideoBlob = result.blob;
+      currentVideoUrl = result.objectUrl;
+      
+      vgPreviewVideo.src = currentVideoUrl;
+      setVideoGenState("preview");
+    } catch (error) {
+      console.error("Video generation failed:", error);
+      
+      var errorMessage = error.message || "An unknown error occurred.";
+      if (errorMessage.includes("API key") || errorMessage.includes("permission")) {
+        // Clear the API key and prompt for a new one
+        showApiKeyDialog(function() {
+          startVideoGeneration(params);
+        });
+        return;
+      }
+      
+      vgErrorMessage.textContent = errorMessage;
+      setVideoGenState("error");
+    }
+  }
+  
+  // Regenerate Button
+  vgRegenerateBtn.addEventListener("click", function() {
+    var prompt = vgPrompt.value.trim();
+    if (prompt) {
+      startVideoGeneration({
+        prompt: prompt,
+        model: vgModel.value,
+        aspectRatio: vgAspect.value,
+        resolution: vgResolution.value
+      });
+    }
+  });
+  
+  // Try Again Button
+  vgTryAgainBtn.addEventListener("click", function() {
+    setVideoGenState("idle");
+  });
+  
+  // Confirm and Add to Deck
+  vgConfirmBtn.addEventListener("click", function() {
+    if (!currentVideoBlob) {
+      alert("No video available to add.");
+      return;
+    }
+    
+    // Generate filename
+    var timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+    var filename = "ai-video-" + timestamp + ".mp4";
+    
+    // Download the video
+    var downloadLink = document.createElement("a");
+    downloadLink.href = currentVideoUrl;
+    downloadLink.download = filename;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+    
+    // Show the add to deck instructions
+    addDeckFilename.value = "media/video/" + filename;
+    
+    // Check if we're converting a placeholder or adding a new slide
+    var isConvertingPlaceholder = convertingPlaceholderIndex >= 0;
+    var notesToUse = isConvertingPlaceholder ? convertingPlaceholderNotes : ("AI Generated video. Prompt: " + vgPrompt.value.trim());
+    
+    // Create the video slide
+    var newSlide = {
+      type: "video",
+      src: "media/video/" + filename,
+      notes: notesToUse,
+      loop: false
+    };
+    
+    var targetIdx;
+    if (isConvertingPlaceholder) {
+      // Replace the placeholder slide
+      targetIdx = convertingPlaceholderIndex;
+      slides[targetIdx] = newSlide;
+    } else {
+      // Add a new slide after the current selection
+      targetIdx = selectedSlideIndex >= 0 ? selectedSlideIndex + 1 : slides.length;
+      slides.splice(targetIdx, 0, newSlide);
+    }
+    
+    // Ensure pagination window includes the new/updated slide
+    updateSlideWindow(targetIdx);
+    
+    // Close modal and show instructions
+    hideVideoGenModal();
+    addToDeckModal.style.display = "flex";
+    
+    renderTimelines();
+    selectSlide(targetIdx);
+    setTimeout(function() { scrollToSlide(targetIdx); }, 50);
+  });
+  
+  // Done Button on Add to Deck Modal
+  addDeckDoneBtn.addEventListener("click", function() {
+    addToDeckModal.style.display = "none";
+  });
+  
+  addToDeckModal.addEventListener("click", function(e) {
+    if (e.target === addToDeckModal) {
+      addToDeckModal.style.display = "none";
+    }
+  });
+  
+  // Close modals with Escape key
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "Escape") {
+      if (apiKeyDialog.style.display === "flex") {
+        hideApiKeyDialog();
+      } else if (videoGenModal.style.display === "flex") {
+        hideVideoGenModal();
+      } else if (addToDeckModal.style.display === "flex") {
+        addToDeckModal.style.display = "none";
+      } else if (videoEditModal && videoEditModal.style.display === "flex") {
+        hideVideoEditModal();
+      }
+    }
+  });
+
+  // ============================================
+  // VIDEO EDITING FEATURE (FFmpeg.wasm)
+  // ============================================
+  
+  var videoEditModal = document.getElementById("video-edit-modal");
+  var videoEditCloseBtn = document.getElementById("video-edit-close");
+  var veLoadingFFmpeg = document.getElementById("ve-loading-ffmpeg");
+  var veEditorState = document.getElementById("ve-editor-state");
+  var veProcessingState = document.getElementById("ve-processing-state");
+  var veCompleteState = document.getElementById("ve-complete-state");
+  var veErrorState = document.getElementById("ve-error-state");
+  var veFFmpegStatus = document.getElementById("ve-ffmpeg-status");
+  var veProcessingStatus = document.getElementById("ve-processing-status");
+  var veProgressFill = document.getElementById("ve-progress-fill");
+  var veProgressText = document.getElementById("ve-progress-text");
+  var veErrorMessage = document.getElementById("ve-error-message");
+  var veOriginalPath = document.getElementById("ve-original-path");
+  
+  var vePreviewVideo = document.getElementById("ve-preview-video");
+  var veTextEnabled = document.getElementById("ve-text-enabled");
+  var veTextOptions = document.getElementById("ve-text-options");
+  var veTextInput = document.getElementById("ve-text-input");
+  var veFontFamily = document.getElementById("ve-font-family");
+  var veFontSize = document.getElementById("ve-font-size");
+  var veFontColor = document.getElementById("ve-font-color");
+  var veTextBorder = document.getElementById("ve-text-border");
+  var veBorderSize = document.getElementById("ve-border-size");
+  var veTextX = document.getElementById("ve-text-x");
+  var veTextY = document.getElementById("ve-text-y");
+  var veTextXValue = document.getElementById("ve-text-x-value");
+  var veTextYValue = document.getElementById("ve-text-y-value");
+  var veTextOverlay = document.getElementById("ve-text-overlay");
+  var veTextOverlayContent = document.getElementById("ve-text-overlay-content");
+  var veDragHint = document.getElementById("ve-drag-hint");
+  var veApplyBtn = document.getElementById("ve-apply-btn");
+  var veCancelBtn = document.getElementById("ve-cancel-btn");
+  var veDoneBtn = document.getElementById("ve-done-btn");
+  var veErrorRetryBtn = document.getElementById("ve-error-retry-btn");
+  var editVideoBtn = document.getElementById("editVideoBtn");
+  var editVideoGroup = document.getElementById("edit-video-group");
+  
+  var ffmpeg = null;
+  var ffmpegLoaded = false;
+  var fontLoaded = false;
+  var webFontsLoaded = false;
+  var currentEditVideoSrc = null;
+  var currentEditVideoBlob = null;
+  var textPositionX = 50; // percentage
+  var textPositionY = 50; // percentage
+  var videoWidth = 1920; // actual video width
+  var videoHeight = 1080; // actual video height
+  
+  // Map font filenames to CSS font-family names
+  var fontFamilyMap = {
+    "Roboto-Bold.ttf": "Roboto-Bold",
+    "Roboto-Regular.ttf": "Roboto-Regular",
+    "OpenSans-Bold.ttf": "OpenSans-Bold",
+    "Lato-Bold.ttf": "Lato-Bold",
+    "Montserrat-Bold.ttf": "Montserrat-Bold",
+    "Montserrat-Regular.ttf": "Montserrat-Regular",
+    "SourceSansPro-Bold.ttf": "SourceSansPro-Bold",
+    "Oswald-Bold.ttf": "Oswald-Bold",
+    "Pacifico-Regular.ttf": "Pacifico-Regular"
+  };
+  
+  // Load fonts for web preview
+  function loadWebFonts() {
+    if (webFontsLoaded) return;
+    
+    var style = document.createElement("style");
+    var css = "";
+    
+    for (var filename in fontFamilyMap) {
+      var familyName = fontFamilyMap[filename];
+      css += "@font-face { font-family: '" + familyName + "'; src: url('lib/fonts/" + filename + "'); }\n";
+    }
+    
+    style.textContent = css;
+    document.head.appendChild(style);
+    webFontsLoaded = true;
+    console.log("Web fonts loaded for preview");
+  }
+  
+  // Load web fonts immediately
+  loadWebFonts();
+  
+  // FFmpeg loading - uses local files
+  async function loadFFmpeg() {
+    if (ffmpegLoaded && ffmpeg) return ffmpeg;
+    
+    try {
+      veFFmpegStatus.textContent = "Loading FFmpeg library...";
+      
+      // FFmpeg.wasm UMD build exposes FFmpegWASM global with FFmpeg class
+      if (typeof FFmpegWASM === 'undefined' || !FFmpegWASM.FFmpeg) {
+        throw new Error("FFmpeg library not loaded. Please refresh the page and try again.");
+      }
+      
+      console.log("Creating FFmpeg instance...");
+      ffmpeg = new FFmpegWASM.FFmpeg();
+      
+      ffmpeg.on("log", function(info) {
+        console.log("FFmpeg log:", info.message);
+      });
+      
+      ffmpeg.on("progress", function(info) {
+        var progress = Math.round(info.progress * 100);
+        veProgressFill.style.width = progress + "%";
+        veProgressText.textContent = progress + "%";
+      });
+      
+      veFFmpegStatus.textContent = "Loading FFmpeg WebAssembly (~30MB)...";
+      
+      // Use absolute URLs for local files
+      var baseURL = new URL("lib/ffmpeg/", window.location.href).href;
+      
+      await ffmpeg.load({
+        coreURL: baseURL + "ffmpeg-core.js",
+        wasmURL: baseURL + "ffmpeg-core.wasm"
+      });
+      
+      ffmpegLoaded = true;
+      console.log("FFmpeg loaded successfully");
+      
+      // Load font files into FFmpeg's virtual filesystem
+      if (!fontLoaded) {
+        veFFmpegStatus.textContent = "Loading fonts...";
+        try {
+          // Create the fonts directory first
+          try {
+            await ffmpeg.createDir("/fonts");
+            console.log("Created /fonts directory");
+          } catch (dirError) {
+            console.log("Fonts directory may already exist:", dirError.message);
+          }
+          
+          // Load all available fonts
+          var fonts = [
+            { name: "Roboto-Bold.ttf", path: "lib/fonts/Roboto-Bold.ttf" },
+            { name: "Roboto-Regular.ttf", path: "lib/fonts/Roboto-Regular.ttf" },
+            { name: "OpenSans-Bold.ttf", path: "lib/fonts/OpenSans-Bold.ttf" },
+            { name: "Lato-Bold.ttf", path: "lib/fonts/Lato-Bold.ttf" },
+            { name: "Montserrat-Bold.ttf", path: "lib/fonts/Montserrat-Bold.ttf" },
+            { name: "Montserrat-Regular.ttf", path: "lib/fonts/Montserrat-Regular.ttf" },
+            { name: "SourceSansPro-Bold.ttf", path: "lib/fonts/SourceSansPro-Bold.ttf" },
+            { name: "Oswald-Bold.ttf", path: "lib/fonts/Oswald-Bold.ttf" },
+            { name: "Pacifico-Regular.ttf", path: "lib/fonts/Pacifico-Regular.ttf" }
+          ];
+          
+          var fontsLoadedCount = 0;
+          for (var i = 0; i < fonts.length; i++) {
+            var font = fonts[i];
+            try {
+              console.log("Fetching font: " + font.path);
+              var fontResponse = await fetch(font.path, { cache: "no-store" });
+              console.log("Font response status:", fontResponse.status, fontResponse.statusText);
+              
+              if (!fontResponse.ok) {
+                console.warn("Failed to fetch font " + font.name + ": " + fontResponse.statusText);
+                continue;
+              }
+              
+              // Clone the response to read it properly
+              var fontBlob = await fontResponse.blob();
+              console.log("Font blob size:", fontBlob.size, "type:", fontBlob.type);
+              
+              if (fontBlob.size === 0) {
+                console.warn("Font " + font.name + " returned empty blob");
+                continue;
+              }
+              
+              var fontData = await fontBlob.arrayBuffer();
+              console.log("Font arrayBuffer size:", fontData.byteLength);
+              
+              if (fontData.byteLength === 0) {
+                console.warn("Font " + font.name + " has 0 bytes after conversion");
+                continue;
+              }
+              
+              var fontUint8 = new Uint8Array(fontData);
+              console.log("Writing font to FFmpeg FS: /fonts/" + font.name, "size:", fontUint8.length);
+              
+              await ffmpeg.writeFile("/fonts/" + font.name, fontUint8);
+              
+              // Verify the file was written
+              try {
+                var written = await ffmpeg.readFile("/fonts/" + font.name);
+                console.log("Verified font in FFmpeg FS: " + font.name + " (" + written.length + " bytes)");
+                fontsLoadedCount++;
+              } catch (verifyError) {
+                console.warn("Could not verify font " + font.name + ":", verifyError);
+              }
+            } catch (fontError) {
+              console.warn("Failed to load font " + font.name + ":", fontError);
+            }
+          }
+          
+          fontLoaded = fontsLoadedCount > 0;
+          console.log("Fonts loaded: " + fontsLoadedCount + " of " + fonts.length);
+          
+          if (!fontLoaded) {
+            console.error("No fonts were loaded! Text overlay will not work.");
+          }
+        } catch (fontError) {
+          console.error("Failed to load fonts:", fontError);
+        }
+      }
+      
+      return ffmpeg;
+    } catch (error) {
+      console.error("Failed to load FFmpeg:", error);
+      throw error;
+    }
+  }
+  
+  // Show/hide video edit modal
+  function showVideoEditModal(videoSrc) {
+    currentEditVideoSrc = videoSrc;
+    videoEditModal.style.display = "flex";
+    setVideoEditState("loading");
+    
+    // Reset controls
+    veTextEnabled.checked = false;
+    veTextOptions.style.display = "none";
+    veTextOverlay.style.display = "none";
+    veDragHint.style.display = "none";
+    veTextInput.value = "";
+    veFontFamily.value = "Roboto-Bold.ttf";
+    veFontSize.value = "48";
+    veFontColor.value = "#ffffff";
+    veTextBorder.checked = true;
+    veBorderSize.value = "3";
+    textPositionX = 50;
+    textPositionY = 50;
+    veTextX.value = 50;
+    veTextY.value = 50;
+    veTextXValue.textContent = "50%";
+    veTextYValue.textContent = "50%";
+    
+    // Load video preview and get dimensions
+    vePreviewVideo.src = videoSrc;
+    vePreviewVideo.onloadedmetadata = function() {
+      videoWidth = vePreviewVideo.videoWidth || 1920;
+      videoHeight = vePreviewVideo.videoHeight || 1080;
+      console.log("Video dimensions:", videoWidth, "x", videoHeight);
+      updateTextOverlayPreview();
+    };
+    
+    // Load FFmpeg
+    loadFFmpeg().then(function() {
+      setVideoEditState("editor");
+    }).catch(function(error) {
+      veErrorMessage.textContent = "Failed to load FFmpeg: " + error.message;
+      setVideoEditState("error");
+    });
+  }
+  
+  function hideVideoEditModal() {
+    videoEditModal.style.display = "none";
+    vePreviewVideo.pause();
+    vePreviewVideo.src = "";
+    currentEditVideoSrc = null;
+    currentEditVideoBlob = null;
+  }
+  
+  function setVideoEditState(state) {
+    veLoadingFFmpeg.style.display = state === "loading" ? "block" : "none";
+    veEditorState.style.display = state === "editor" ? "block" : "none";
+    veProcessingState.style.display = state === "processing" ? "block" : "none";
+    veCompleteState.style.display = state === "complete" ? "block" : "none";
+    veErrorState.style.display = state === "error" ? "block" : "none";
+  }
+  
+  // Update text overlay preview
+  function updateTextOverlayPreview() {
+    var text = veTextInput.value || "Sample Text";
+    var fontFile = veFontFamily.value;
+    var fontSize = parseInt(veFontSize.value) || 48;
+    var color = veFontColor.value;
+    var hasBorder = veTextBorder.checked;
+    var borderWidth = parseInt(veBorderSize.value) || 3;
+    
+    // Calculate scale factor based on actual video vs preview size
+    var previewRect = vePreviewVideo.getBoundingClientRect();
+    var previewWidth = previewRect.width || 400;
+    var scaleFactor = previewWidth / videoWidth;
+    
+    // Scale font size for preview
+    var previewFontSize = Math.max(10, Math.round(fontSize * scaleFactor));
+    
+    // Get CSS font family name from the map
+    var cssFontFamily = fontFamilyMap[fontFile] || "sans-serif";
+    
+    veTextOverlayContent.textContent = text;
+    veTextOverlayContent.style.fontFamily = "'" + cssFontFamily + "', sans-serif";
+    veTextOverlayContent.style.fontSize = previewFontSize + "px";
+    veTextOverlayContent.style.color = color;
+    
+    // Apply or remove text shadow (border effect) - scale border with preview
+    if (hasBorder && borderWidth > 0) {
+      var scaledBorder = Math.max(1, Math.round(borderWidth * scaleFactor));
+      veTextOverlayContent.style.textShadow = 
+        scaledBorder + "px " + scaledBorder + "px 0 black, " +
+        (-scaledBorder) + "px " + (-scaledBorder) + "px 0 black, " +
+        scaledBorder + "px " + (-scaledBorder) + "px 0 black, " +
+        (-scaledBorder) + "px " + scaledBorder + "px 0 black, " +
+        "0 " + scaledBorder + "px 0 black, " +
+        "0 " + (-scaledBorder) + "px 0 black, " +
+        scaledBorder + "px 0 0 black, " +
+        (-scaledBorder) + "px 0 0 black";
+    } else {
+      veTextOverlayContent.style.textShadow = "none";
+    }
+    
+    // Position the overlay
+    veTextOverlay.style.left = textPositionX + "%";
+    veTextOverlay.style.top = textPositionY + "%";
+  }
+  
+  // Text overlay toggle
+  veTextEnabled.addEventListener("change", function() {
+    veTextOptions.style.display = this.checked ? "block" : "none";
+    veTextOverlay.style.display = this.checked ? "block" : "none";
+    veDragHint.style.display = this.checked ? "block" : "none";
+    if (this.checked) {
+      updateTextOverlayPreview();
+    }
+  });
+  
+  // Text input changes - all trigger preview update
+  veTextInput.addEventListener("input", updateTextOverlayPreview);
+  veFontFamily.addEventListener("change", updateTextOverlayPreview);
+  veFontSize.addEventListener("input", updateTextOverlayPreview);
+  veFontColor.addEventListener("input", updateTextOverlayPreview);
+  veTextBorder.addEventListener("change", updateTextOverlayPreview);
+  veBorderSize.addEventListener("input", updateTextOverlayPreview);
+  
+  // Position sliders
+  veTextX.addEventListener("input", function() {
+    textPositionX = parseInt(this.value);
+    veTextXValue.textContent = textPositionX + "%";
+    updateTextOverlayPreview();
+  });
+  
+  veTextY.addEventListener("input", function() {
+    textPositionY = parseInt(this.value);
+    veTextYValue.textContent = textPositionY + "%";
+    updateTextOverlayPreview();
+  });
+  
+  // Draggable text overlay
+  var isDragging = false;
+  var dragStartX, dragStartY;
+  
+  veTextOverlay.addEventListener("mousedown", function(e) {
+    isDragging = true;
+    veTextOverlay.classList.add("dragging");
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    e.preventDefault();
+  });
+  
+  document.addEventListener("mousemove", function(e) {
+    if (!isDragging) return;
+    
+    var container = veTextOverlay.parentElement;
+    var rect = container.getBoundingClientRect();
+    
+    // Calculate new position as percentage
+    var newX = ((e.clientX - rect.left) / rect.width) * 100;
+    var newY = ((e.clientY - rect.top) / rect.height) * 100;
+    
+    // Clamp to bounds
+    textPositionX = Math.max(5, Math.min(95, newX));
+    textPositionY = Math.max(5, Math.min(95, newY));
+    
+    // Update sliders and preview
+    veTextX.value = Math.round(textPositionX);
+    veTextY.value = Math.round(textPositionY);
+    veTextXValue.textContent = Math.round(textPositionX) + "%";
+    veTextYValue.textContent = Math.round(textPositionY) + "%";
+    updateTextOverlayPreview();
+  });
+  
+  document.addEventListener("mouseup", function() {
+    if (isDragging) {
+      isDragging = false;
+      veTextOverlay.classList.remove("dragging");
+    }
+  });
+  
+  // Close button
+  videoEditCloseBtn.addEventListener("click", hideVideoEditModal);
+  veCancelBtn.addEventListener("click", hideVideoEditModal);
+  veDoneBtn.addEventListener("click", hideVideoEditModal);
+  veErrorRetryBtn.addEventListener("click", function() {
+    setVideoEditState("editor");
+  });
+  
+  // Click outside to close
+  videoEditModal.addEventListener("click", function(e) {
+    if (e.target === videoEditModal) {
+      hideVideoEditModal();
+    }
+  });
+  
+  // Convert hex color to FFmpeg format
+  function hexToFFmpegColor(hex) {
+    // FFmpeg uses format like 0xRRGGBB or white, black, etc
+    return hex.replace("#", "0x");
+  }
+  
+  // Apply edits and download
+  veApplyBtn.addEventListener("click", async function() {
+    if (!ffmpeg || !currentEditVideoSrc) return;
+    
+    // Validate text overlay settings
+    if (veTextEnabled.checked) {
+      if (!veTextInput.value.trim()) {
+        alert("Please enter text for the overlay, or disable text overlay.");
+        veTextInput.focus();
+        return;
+      }
+      if (!fontLoaded) {
+        alert("Font file not loaded. Text overlay may not work correctly.");
+      }
+    } else {
+      alert("Please enable text overlay and enter text to process the video. Volume can be adjusted in the slide editor without re-encoding.");
+      return;
+    }
+    
+    setVideoEditState("processing");
+    veProgressFill.style.width = "0%";
+    veProgressText.textContent = "0%";
+    veProcessingStatus.textContent = "Fetching video file...";
+    
+    var inputFile = null;
+    var outputFile = "output.mp4";
+    
+    try {
+      // Fetch the video file
+      var response = await fetch(currentEditVideoSrc);
+      if (!response.ok) {
+        throw new Error("Failed to fetch video file: " + response.statusText);
+      }
+      var videoData = await response.arrayBuffer();
+      
+      // Determine input file extension
+      var inputExt = currentEditVideoSrc.split('.').pop().toLowerCase();
+      if (inputExt === "m4v") inputExt = "mp4"; // Treat m4v as mp4
+      inputFile = "input." + inputExt;
+      
+      veProcessingStatus.textContent = "Writing video to FFmpeg...";
+      
+      // Write input file to FFmpeg
+      await ffmpeg.writeFile(inputFile, new Uint8Array(videoData));
+      
+      veProcessingStatus.textContent = "Processing video...";
+      
+      // Build FFmpeg command for text overlay only
+      // Volume is handled via JSON settings in the slide editor
+      var videoFilters = [];
+      
+      // Text overlay - escape special characters for FFmpeg drawtext filter
+      // FFmpeg.wasm exec() passes args directly without shell, so we only need
+      // FFmpeg filter-level escaping (not shell escaping)
+      var text = veTextInput.value.trim()
+        .replace(/\\/g, "\\\\\\\\")  // \ -> \\\\ (double escape: once for filter, once for drawtext)
+        .replace(/'/g, "\\'")         // ' -> \' (escape single quote within single-quoted text)
+        .replace(/:/g, "\\:")         // : -> \: (escape colon, the option separator)
+        .replace(/\[/g, "\\[")        // [ -> \[ (escape bracket for text expansion)
+        .replace(/\]/g, "\\]");       // ] -> \] (escape bracket for text expansion)
+      
+      var fontFile = veFontFamily.value;
+      var fontSize = parseInt(veFontSize.value) || 48;
+      var fontColor = hexToFFmpegColor(veFontColor.value);
+      var hasBorder = veTextBorder.checked;
+      var borderWidth = parseInt(veBorderSize.value) || 3;
+      
+      // Calculate position based on percentage
+      var xExpr = "(" + (textPositionX / 100) + "*w-text_w/2)";
+      var yExpr = "(" + (textPositionY / 100) + "*h-text_h/2)";
+      
+      // Build drawtext filter with font file
+      var drawtext = "drawtext=fontfile=/fonts/" + fontFile;
+      drawtext += ":text='" + text + "'";
+      drawtext += ":fontsize=" + fontSize;
+      drawtext += ":fontcolor=" + fontColor;
+      drawtext += ":x=" + xExpr;
+      drawtext += ":y=" + yExpr;
+      
+      // Add border if enabled
+      if (hasBorder && borderWidth > 0) {
+        drawtext += ":borderw=" + borderWidth + ":bordercolor=black";
+      }
+      
+      videoFilters.push(drawtext);
+      
+      // Build command arguments
+      var args = ["-i", inputFile];
+      
+      // Add video filter for text overlay
+      args.push("-vf", videoFilters.join(","));
+      
+      // Output settings - copy audio stream without modification
+      args.push("-c:v", "libx264");
+      args.push("-preset", "fast");
+      args.push("-crf", "23");
+      args.push("-c:a", "copy"); // Copy audio as-is, volume is handled by playback settings
+      args.push("-movflags", "+faststart");
+      args.push("-y"); // Overwrite output
+      args.push(outputFile);
+      
+      console.log("FFmpeg command:", args.join(" "));
+      
+      // Run FFmpeg and capture return code
+      var returnCode = await ffmpeg.exec(args);
+      console.log("FFmpeg return code:", returnCode);
+      
+      if (returnCode !== 0) {
+        throw new Error("FFmpeg processing failed with code " + returnCode + ". Check console for details.");
+      }
+      
+      veProcessingStatus.textContent = "Reading output file...";
+      
+      // Check if output file exists and has content
+      var outputData;
+      try {
+        outputData = await ffmpeg.readFile(outputFile);
+      } catch (readError) {
+        throw new Error("Output file was not created. FFmpeg processing failed.");
+      }
+      
+      if (!outputData || outputData.length === 0) {
+        throw new Error("Output file is empty. FFmpeg processing failed.");
+      }
+      
+      console.log("Output file size:", outputData.length, "bytes");
+      
+      currentEditVideoBlob = new Blob([outputData.buffer], { type: "video/mp4" });
+      
+      // Create download
+      var timestamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
+      var originalFilename = currentEditVideoSrc.split('/').pop().replace(/\.[^/.]+$/, "");
+      var downloadFilename = originalFilename + "-edited-" + timestamp + ".mp4";
+      
+      var downloadUrl = URL.createObjectURL(currentEditVideoBlob);
+      var downloadLink = document.createElement("a");
+      downloadLink.href = downloadUrl;
+      downloadLink.download = downloadFilename;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      URL.revokeObjectURL(downloadUrl);
+      
+      // Clean up FFmpeg files
+      try {
+        await ffmpeg.deleteFile(inputFile);
+        await ffmpeg.deleteFile(outputFile);
+      } catch (cleanupError) {
+        console.warn("Cleanup error:", cleanupError);
+      }
+      
+      // Show complete state
+      veOriginalPath.value = currentEditVideoSrc;
+      setVideoEditState("complete");
+      
+    } catch (error) {
+      console.error("Video processing error:", error);
+      veErrorMessage.textContent = error.message || "An error occurred while processing the video.";
+      setVideoEditState("error");
+      
+      // Clean up on error
+      try {
+        if (inputFile) await ffmpeg.deleteFile(inputFile);
+        await ffmpeg.deleteFile(outputFile);
+      } catch (cleanupError) {
+        // Ignore cleanup errors
+      }
+    }
+  });
+  
+  // Edit Video button click
+  editVideoBtn.addEventListener("click", function() {
+    if (selectedSlideIndex < 0) return;
+    var slide = slides[selectedSlideIndex];
+    if (slide.type !== "video" || !slide.src) return;
+    showVideoEditModal(slide.src);
+  });
+
+  // ============================================
+  // AUDIO VOLUME CONTROL & FADE SETTINGS
+  // ============================================
+  
+  var audioVolumeSlider = document.getElementById("audio-volume");
+  var audioVolumeValue = document.getElementById("audio-volume-value");
+  var audioPauseSlidesInput = document.getElementById("audio-pause-slides");
+  var audioFadeEnabledInput = document.getElementById("audio-fade-enabled");
+  var audioFadeOptions = document.getElementById("audio-fade-options");
+  var audioFadeInInput = document.getElementById("audio-fade-in");
+  var audioFadeOutInput = document.getElementById("audio-fade-out");
+  
+  // Track which audio elements are paused due to pause slides
+  var pausedForSlide = {};
+  
+  // Toggle fade options visibility
+  audioFadeEnabledInput.addEventListener("change", function() {
+    audioFadeOptions.style.display = this.checked ? "block" : "none";
+  });
+  
+  // Track active fade animations and elements being faded out
+  var activeFadeIntervals = {};
+  var fadingOutElements = {};
+  
+  // Update volume display and preview playback volume
+  audioVolumeSlider.addEventListener("input", function() {
+    var volumePercent = parseInt(this.value);
+    audioVolumeValue.textContent = volumePercent + "%";
+    
+    // Update the audio preview player volume in real-time
+    // Volume is 0-1 for HTML audio, but our slider is 0-200%
+    // Cap at 1.0 (100%) since HTML audio can't go above that
+    if (audioPreview) {
+      audioPreview.volume = Math.min(1, volumePercent / 100);
+    }
+  });
+  
+  // Override selectAudioTrack to include volume, pause slides, and fade settings
+  var originalSelectAudioTrack = selectAudioTrack;
+  selectAudioTrack = function(index) {
+    originalSelectAudioTrack(index);
+    
+    // Load volume setting
+    var track = audioTracks[index];
+    var volume = track.volume !== undefined ? track.volume : 100;
+    audioVolumeSlider.value = volume;
+    audioVolumeValue.textContent = volume + "%";
+    
+    // Load pause slides (convert array to comma-separated string, using 1-based slide numbers)
+    var pauseSlides = track.pauseSlides || [];
+    audioPauseSlidesInput.value = pauseSlides.map(function(s) { return s + 1; }).join(", ");
+    
+    // Load fade settings (default to disabled with 0.5 second durations)
+    var fadeEnabled = !!track.fadeEnabled;
+    var fadeIn = track.fadeIn !== undefined ? track.fadeIn : 0.5;
+    var fadeOut = track.fadeOut !== undefined ? track.fadeOut : 0.5;
+    audioFadeEnabledInput.checked = fadeEnabled;
+    audioFadeOptions.style.display = fadeEnabled ? "block" : "none";
+    audioFadeInInput.value = fadeIn;
+    audioFadeOutInput.value = fadeOut;
+    
+    // Set the audio preview player volume to match
+    if (audioPreview) {
+      audioPreview.volume = Math.min(1, volume / 100);
+    }
+  };
+  
+  // Parse pause slides input (comma-separated 1-based slide numbers) to array of 0-based indices
+  function parsePauseSlides(inputValue) {
+    if (!inputValue || !inputValue.trim()) return [];
+    return inputValue.split(",")
+      .map(function(s) { return parseInt(s.trim()) - 1; }) // Convert to 0-based
+      .filter(function(n) { return !isNaN(n) && n >= 0; }); // Filter out invalid values
+  }
+  
+  // Override audio form submit to include volume, pause slides, and fade settings
+  var originalAudioFormSubmit = audioForm.onsubmit;
+  audioForm.addEventListener("submit", function(e) {
+    // Save volume, pause slides, and fade settings to track
+    if (selectedAudioIndex >= 0) {
+      audioTracks[selectedAudioIndex].volume = parseInt(audioVolumeSlider.value);
+      audioTracks[selectedAudioIndex].pauseSlides = parsePauseSlides(audioPauseSlidesInput.value);
+      audioTracks[selectedAudioIndex].fadeEnabled = audioFadeEnabledInput.checked;
+      // Use isNaN check instead of || to allow 0 as a valid value
+      var fadeInVal = parseFloat(audioFadeInInput.value);
+      var fadeOutVal = parseFloat(audioFadeOutInput.value);
+      audioTracks[selectedAudioIndex].fadeIn = isNaN(fadeInVal) ? 0.5 : fadeInVal;
+      audioTracks[selectedAudioIndex].fadeOut = isNaN(fadeOutVal) ? 0.5 : fadeOutVal;
+    }
+    // Save to localStorage AFTER all fields are updated
+    saveToLocalStorage();
+  });
+  
+  // Fade audio volume over a duration
+  function fadeAudioVolume(audioElement, trackIndex, startVolume, endVolume, duration, onComplete) {
+    // Clear any existing fade for this track
+    if (activeFadeIntervals[trackIndex]) {
+      clearInterval(activeFadeIntervals[trackIndex]);
+      delete activeFadeIntervals[trackIndex];
+    }
+    
+    // If duration is 0 or very small, just set the volume directly
+    if (duration <= 0.01) {
+      audioElement.volume = Math.min(1, endVolume);
+      if (onComplete) onComplete();
+      return;
+    }
+    
+    var steps = Math.max(1, Math.round(duration * 50)); // 50 steps per second
+    var stepDuration = (duration * 1000) / steps;
+    var volumeStep = (endVolume - startVolume) / steps;
+    var currentStep = 0;
+    
+    audioElement.volume = Math.min(1, Math.max(0, startVolume));
+    
+    activeFadeIntervals[trackIndex] = setInterval(function() {
+      currentStep++;
+      var newVolume = startVolume + (volumeStep * currentStep);
+      audioElement.volume = Math.min(1, Math.max(0, newVolume));
+      
+      if (currentStep >= steps) {
+        clearInterval(activeFadeIntervals[trackIndex]);
+        delete activeFadeIntervals[trackIndex];
+        audioElement.volume = Math.min(1, Math.max(0, endVolume));
+        if (onComplete) onComplete();
+      }
+    }, stepDuration);
+  }
+  
+  // Override updateAudio to apply volume, pause slides, and fade effects during playback
+  var originalUpdateAudio = updateAudio;
+  updateAudio = function() {
+    for (var i = 0; i < audioTracks.length; i++) {
+      var track = audioTracks[i];
+      var isInRange = currentSlideIndex >= track.startSlide && currentSlideIndex <= track.endSlide;
+      var fadeEnabled = !!track.fadeEnabled;
+      var pauseSlides = track.pauseSlides || [];
+      var shouldPauseForSlide = pauseSlides.indexOf(currentSlideIndex) !== -1;
+      
+      if (isInRange) {
+        // Cancel any pending fade out for this track
+        if (fadingOutElements[i]) {
+          clearInterval(activeFadeIntervals[i]);
+          delete activeFadeIntervals[i];
+          // Restore the element that was fading out
+          activeAudioElements[i] = fadingOutElements[i];
+          delete fadingOutElements[i];
+          
+          // Get target volume
+          var targetVolume = (track.volume !== undefined ? track.volume : 100) / 100;
+          
+          // Fade back in if fades are enabled, otherwise set volume immediately
+          if (fadeEnabled) {
+            var fadeInDuration = track.fadeIn !== undefined ? track.fadeIn : 0.5;
+            fadeAudioVolume(activeAudioElements[i], i, activeAudioElements[i].volume, targetVolume, fadeInDuration, null);
+          } else {
+            activeAudioElements[i].volume = Math.min(1, targetVolume);
+          }
+        }
+        
+        if (!activeAudioElements[i]) {
+          // Audio should start playing
+          var el = new Audio(track.src);
+          el.loop = !!track.loop;
+          
+          // Get volume and fade settings
+          var targetVolume = (track.volume !== undefined ? track.volume : 100) / 100;
+          
+          activeAudioElements[i] = el;
+          
+          if (fadeEnabled) {
+            // Start at volume 0 for fade in
+            var fadeInDuration = track.fadeIn !== undefined ? track.fadeIn : 0.5;
+            el.volume = 0;
+            
+            // Start playback then fade in (unless on a pause slide)
+            if (!paused && !shouldPauseForSlide) {
+              el.play().catch(function(){});
+              fadeAudioVolume(el, i, 0, targetVolume, fadeInDuration, null);
+            } else if (shouldPauseForSlide) {
+              // On a pause slide - don't start playing, mark as paused for slide
+              pausedForSlide[i] = true;
+            }
+          } else {
+            // No fade - start at target volume immediately (unless on a pause slide)
+            el.volume = Math.min(1, targetVolume);
+            if (!paused && !shouldPauseForSlide) {
+              el.play().catch(function(){});
+            } else if (shouldPauseForSlide) {
+              pausedForSlide[i] = true;
+            }
+          }
+        } else {
+          // Audio element exists - handle pause slides
+          if (shouldPauseForSlide) {
+            // Should be paused for this slide
+            if (!pausedForSlide[i] && !activeAudioElements[i].paused) {
+              activeAudioElements[i].pause();
+              pausedForSlide[i] = true;
+            }
+          } else {
+            // Not a pause slide - resume if was paused for slide
+            if (pausedForSlide[i]) {
+              delete pausedForSlide[i];
+              if (!paused) {
+                activeAudioElements[i].play().catch(function(){});
+              }
+            }
+            // Update target volume (no fade for mid-track changes)
+            // Only update if not currently fading
+            if (!activeFadeIntervals[i]) {
+              var targetVolume = (track.volume !== undefined ? track.volume : 100) / 100;
+              activeAudioElements[i].volume = Math.min(1, targetVolume);
+            }
+          }
+        }
+      } else if (activeAudioElements[i] && !fadingOutElements[i]) {
+        // Audio should stop (leaving range)
+        var audioEl = activeAudioElements[i];
+        var trackIndexToRemove = i;
+        
+        // Clear pause state
+        delete pausedForSlide[i];
+        
+        if (fadeEnabled) {
+          // Apply fade out
+          var fadeOutDuration = track.fadeOut !== undefined ? track.fadeOut : 0.5;
+          
+          // Move to fading out state
+          fadingOutElements[i] = audioEl;
+          delete activeAudioElements[i];
+          
+          // Fade out then stop
+          fadeAudioVolume(audioEl, i, audioEl.volume, 0, fadeOutDuration, function() {
+            // Only stop if still in fading out state (not restored)
+            if (fadingOutElements[trackIndexToRemove] === audioEl) {
+              audioEl.pause();
+              audioEl.currentTime = 0;
+              delete fadingOutElements[trackIndexToRemove];
+            }
+          });
+        } else {
+          // No fade - stop immediately
+          audioEl.pause();
+          audioEl.currentTime = 0;
+          delete activeAudioElements[i];
+        }
+      }
+    }
+  };
+
+  // ============================================
+  // SUBTITLE SETTINGS
+  // ============================================
+  
+  var subtitleSettingsBtn = document.getElementById("subtitleSettingsBtn");
+  var subtitleSettingsEditor = document.getElementById("subtitle-settings-editor");
+  var subtitleSizeSlider = document.getElementById("subtitleSizeSlider");
+  var subtitleSizeDisplay = document.getElementById("subtitleSizeDisplay");
+  var subtitlePreviewText = document.getElementById("subtitlePreviewText");
+  var saveSubtitleSettingsBtn = document.getElementById("saveSubtitleSettings");
+  
+  // Base font size for preview (in px, scaled to match vw on a typical screen)
+  var PREVIEW_BASE_SIZE = 24;
+  
+  // Apply settings to subtitle system and preview
+  function applySubtitleSettings() {
+    var size = presentationSettings.subtitleSize || 100;
+    
+    // Update subtitle system
+    if (window.subtitleSystem && window.subtitleSystem.setSize) {
+      window.subtitleSystem.setSize(size);
+    }
+    
+    // Update slider if visible
+    if (subtitleSizeSlider) {
+      subtitleSizeSlider.value = size;
+    }
+    if (subtitleSizeDisplay) {
+      subtitleSizeDisplay.textContent = size + "%";
+    }
+    
+    // Update preview
+    updateSubtitlePreview(size);
+  }
+  
+  // Update the preview text size
+  function updateSubtitlePreview(sizePercent) {
+    if (subtitlePreviewText) {
+      var fontSize = (PREVIEW_BASE_SIZE * sizePercent) / 100;
+      subtitlePreviewText.style.fontSize = fontSize + "px";
+    }
+  }
+  
+  // Show subtitle settings panel
+  function showSubtitleSettings() {
+    // Hide other editors
+    slideEditor.style.display = "none";
+    audioEditor.style.display = "none";
+    slideForm.style.display = "none";
+    editorPlaceholder.style.display = "none";
+    slidePositionBadge.style.display = "none";
+    
+    // Deselect other items
+    selectedSlideIndex = -1;
+    selectedAudioIndex = -1;
+    document.querySelectorAll(".slide-block").forEach(function(b) { b.classList.remove("selected"); });
+    document.querySelectorAll(".audio-track").forEach(function(t) { t.classList.remove("selected"); });
+    
+    // Show subtitle settings
+    subtitleSettingsEditor.style.display = "block";
+    
+    // Load current values
+    var size = presentationSettings.subtitleSize || 100;
+    subtitleSizeSlider.value = size;
+    subtitleSizeDisplay.textContent = size + "%";
+    updateSubtitlePreview(size);
+    
+    // Update preview container
+    previewContainer.innerHTML = '<p class="preview-placeholder">Adjust subtitle settings</p>';
+    hideAudioPreview();
+    updateNavButtons();
+  }
+  
+  // Subtitle settings button click
+  if (subtitleSettingsBtn) {
+    subtitleSettingsBtn.addEventListener("click", showSubtitleSettings);
+  }
+  
+  // Slider input - update display and preview in real-time
+  if (subtitleSizeSlider) {
+    subtitleSizeSlider.addEventListener("input", function() {
+      var size = parseInt(this.value, 10);
+      subtitleSizeDisplay.textContent = size + "%";
+      updateSubtitlePreview(size);
+    });
+  }
+  
+  // Save button
+  if (saveSubtitleSettingsBtn) {
+    saveSubtitleSettingsBtn.addEventListener("click", function() {
+      var size = parseInt(subtitleSizeSlider.value, 10);
+      presentationSettings.subtitleSize = size;
+      
+      // Apply to subtitle system
+      if (window.subtitleSystem && window.subtitleSystem.setSize) {
+        window.subtitleSystem.setSize(size);
+      }
+      
+      // Save to localStorage
+      saveToLocalStorage();
+      
+      // Visual feedback
+      var btn = saveSubtitleSettingsBtn;
+      btn.innerText = "✓ Saved";
+      btn.style.background = "#27ae60";
+      setTimeout(function() { 
+        btn.innerText = "Save Settings"; 
+        btn.style.background = ""; 
+      }, 1200);
+    });
+  }
+  
+  // Also update export to include settings
+  var originalExportHandler = exportBtn.onclick;
+  exportBtn.addEventListener("click", function() {
+    var data = JSON.stringify({ slides: slides, audio: audioTracks, settings: presentationSettings }, null, 2);
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([data], { type: "application/json" }));
+    a.download = "data.json";
+    a.click();
+  }, true);
+  
+  // Remove the old export handler since we need to replace it
+  exportBtn.onclick = null;
+}

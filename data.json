@@ -1,0 +1,269 @@
+{
+  "slides": [
+    {
+      "type": "placeholder",
+      "notes": "",
+      "title": "whoami",
+      "backgroundColor": "#333333",
+      "text": "",
+      "timedAdvance": false,
+      "advanceDuration": 5000
+    },
+    {
+      "type": "placeholder",
+      "notes": "",
+      "title": "Black start",
+      "backgroundColor": "#333333",
+      "text": "",
+      "timedAdvance": false,
+      "advanceDuration": 5000
+    },
+    {
+      "type": "placeholder",
+      "notes": "",
+      "title": "fivver guy",
+      "backgroundColor": "#333333",
+      "text": "",
+      "timedAdvance": false,
+      "advanceDuration": 5000
+    },
+    {
+      "type": "placeholder",
+      "notes": "",
+      "title": "cuts to sam altman",
+      "backgroundColor": "#333333",
+      "text": "",
+      "timedAdvance": false,
+      "advanceDuration": 5000
+    },
+    {
+      "type": "placeholder",
+      "notes": "",
+      "title": "An observed moment of silence...",
+      "backgroundColor": "#333333",
+      "text": "",
+      "timedAdvance": false,
+      "advanceDuration": 5000
+    },
+    {
+      "type": "image",
+      "notes": "In 2016 Clément Delangue\n\nJulien Chaumond\n\nThomas Wolf \n\nraised about a million dollars to make a business around an AI chatbot...",
+      "src": "media/img/hfleaders.webp",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "The now infamous Attention is All you need transformers paper Google put out, the one that powered the current AI insanity we're living through right now, hadn't dropped yet....\n\nThat came out in 2017. So in 2016, for these 3 cofounders, their AI chatbot would have been technically limited, ",
+      "src": "media/img/attention_is_all_you_need.png",
+      "zoompan": true
+    },
+    {
+      "type": "video",
+      "notes": "think about how Alexa and Siri used to feel... that's what they would have been working with technology wise.",
+      "src": "media/video/Elderly_Person_Tries_Google_Home.mp4",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "image",
+      "notes": "So when Google dropped their Transformers paper in 2017, and then more importantly a year later in 2018 Google released BERT, an open weights LLM",
+      "src": "media/img/Open_Sourcing_BERT__State-of-the-Art_Pre-training_for_Natural_Language_Processin.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "It's worth noting a lesser known company gpt1 dropped a little bit before Bert was released... both models followed the same basic formula.\n\nA foundational model following the \"Attention is all you need\" architecture, followed with two stages of learning, phase one is unsupervised, you feed it blindly all the data you can, and phase two is supervised, you slowly, using humans back then, reinforce it to behave like you want it to... like a chat bot...",
+      "src": "media/img/Cursor_and_Improving_language_understanding_with_unsupervised_learning___OpenAI.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "No one was really paying attention to OpenAI, but Bert was getting a lot of attention... here's an example of it in action, I ask it what the capital of New Jersey is, and it correctly says Newark.",
+      "src": "media/img/google-bert_bert-base-uncased_·_Hugging_Face_capital.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "I ask it what two plus two is equal to, and it correctly says the answer is One.",
+      "src": "media/img/google-bert_bert-base-uncased_·_Hugging_Face.png",
+      "zoompan": true
+    },
+    {
+      "type": "video",
+      "notes": "So for a company working on an AI chatbot? Well suffice to say they took notice...\n\nThey wanted to adopt Bert. Tweak it.. fine tune it... you mgiht even say transform it",
+      "src": "media/video/Techie_s_Surprised_Reaction_Video.mp4",
+      "loop": false,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "image",
+      "notes": "And so they released pytorch pretrained bert version 0.1.1\n\nThat's a mouthful... ",
+      "src": "media/img/pytorch-pretrained-bert_·_PyPI.png",
+      "zoompan": false
+    },
+    {
+      "type": "image",
+      "notes": "but importantly this became the foundation of the popular transformers library that's an industry standard for working with open source models today...\n\nThis represented a transition in the company's history, from a company focused on a single chatbot, to a company focused on providing the infrastructure that powers open source models",
+      "src": "media/img/transformers.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "And so a couple years later, they launched the hub... a platform that now hosts all of the most popular open source models in the world, the code required to run them, as well as a lot of open training data",
+      "src": "media/img/Models_–_Hugging_Face.png",
+      "zoompan": true
+    },
+    {
+      "type": "video",
+      "notes": "But what even is an open source model? Models aren't exactly source code.. so how can the source be open? is open source even the right word for an open model?",
+      "src": "media/video/Open_Source_LLM_Video_Generated.mp4",
+      "loop": false,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "That question... almost tour an open source non-profit called the Open Source Initiative apart",
+      "src": "media/video/20260225_2119_01kjc4b7pafn4ssj6jxvte8mjx.mp4",
+      "loop": false,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "image",
+      "notes": "Who even are the OSI? and why should you care? Well in the 90's their founder coined the term \"Open Source\"",
+      "src": "media/img/osi.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "And many governments for years recognize their definition of open source software...\n\nWhy does it matter how a government defines open source?",
+      "src": "media/img/Open-source_software_-_Wikipedia.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "The short answer is regulation. Allow me to introduce you to the European AI act, which gives special carveouts to Open Source models, lowering their legal and compliance overhead burden ",
+      "src": "media/img/Regulation_-_EU_-_2024_1689_-_EN_-_EUR-Lex.png",
+      "zoompan": true
+    },
+    {
+      "type": "video",
+      "notes": "So why did this almost break the OSI? Disagreements over the definition of open-source when it comes to AI models... and at the heart of it? Data.",
+      "src": "media/video/20260225_2119_01kjc4b7pafn4ssj6jxvte8mjx.mp4",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "image",
+      "notes": "Should datasets, like the 880,000 datasets already hosted on huggingface, be a requirement in order to call an open source model, open source?",
+      "src": "media/img/Datasets_–_Hugging_Face.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "A question that was so charged, the OSI suspended their board election, because they didn't want a new board member with radical views on this topic... and the radical view in question? That the data should be open as part of the open-source defintion.",
+      "src": "media/img/OSI_pauses_2026_board_election_cycle__LWN_net_.png",
+      "zoompan": true
+    },
+    {
+      "type": "video",
+      "notes": "You can find the petition online containing hundreds of names, upset with this outcome... so why? Why resist open data as a part of open models? What is it about opening up the data that seems so impractical to the OSI board, they put themselves in this frankly embarrassing crossroads?\n\nTo answer that question... we need to zoom in on some of the data",
+      "src": "media/video/petitionosi.mov",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "image",
+      "notes": "I want to introduce you to The Stack. This is a dataset on HuggingFace. It has 3 terrabytes of permissive code scraped from GitHub.\n\nI wanted to visualize how much data this is for you all... Like if I were to print it out, how many pages would this be?",
+      "src": "media/img/Cursor_and_bigcode_the-stack_·_Datasets_at_Hugging_Face.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "",
+      "src": "media/img/bigcode_the-stack-v2_·_Datasets_at_Hugging_Face.png",
+      "zoompan": true
+    },
+    {
+      "type": "placeholder",
+      "notes": "",
+      "title": "Wasn't their first contraversy",
+      "backgroundColor": "#333333",
+      "text": "",
+      "timedAdvance": false,
+      "advanceDuration": 5000
+    },
+    {
+      "type": "placeholder",
+      "notes": "",
+      "title": "Coming Soon",
+      "backgroundColor": "#333333",
+      "text": "This matters because EU regulations",
+      "timedAdvance": false,
+      "advanceDuration": 5000
+    },
+    {
+      "type": "placeholder",
+      "notes": "",
+      "title": "Heart of the debate",
+      "backgroundColor": "#333333",
+      "text": "",
+      "timedAdvance": false,
+      "advanceDuration": 5000
+    },
+    {
+      "type": "placeholder",
+      "notes": "",
+      "title": "Should data models be open source?",
+      "backgroundColor": "#333333",
+      "text": "",
+      "timedAdvance": false,
+      "advanceDuration": 5000
+    },
+    {
+      "type": "placeholder",
+      "notes": "",
+      "title": "Argument for repeatability",
+      "backgroundColor": "#333333",
+      "text": "",
+      "timedAdvance": false,
+      "advanceDuration": 5000
+    },
+    {
+      "type": "placeholder",
+      "notes": "",
+      "title": "Argument for derivitives",
+      "backgroundColor": "#333333",
+      "text": "",
+      "timedAdvance": false,
+      "advanceDuration": 5000
+    },
+    {
+      "type": "placeholder",
+      "notes": "",
+      "title": "inherient legal and privacy issues",
+      "backgroundColor": "#333333",
+      "text": "",
+      "timedAdvance": false,
+      "advanceDuration": 5000
+    }
+  ],
+  "audio": [
+    {
+      "src": "media/audio/welcome.mp3",
+      "startSlide": 1,
+      "endSlide": 3,
+      "loop": false,
+      "volume": 100,
+      "pauseSlides": [],
+      "fadeEnabled": false,
+      "fadeIn": 0.5,
+      "fadeOut": 0.5
+    }
+  ]
+}
