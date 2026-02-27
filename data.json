@@ -184,9 +184,37 @@
       "zoompan": true
     },
     {
+      "type": "video",
+      "notes": "I was thinking about how I could visualize this much data... Like if we were to print it out, how big would the stack be?\n\nI started thinking, maybe I could print it out, and show you. And it turns out the cheapest way to print 550 pages is to publish a book in Amazon self publish marketplace",
+      "src": "media/video/Printing_All_of_GitHub.mp4",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
       "type": "image",
-      "notes": "",
+      "notes": "So that's what I did, and that's what I'm holding here... you can buy your own copy on amazon too if you want, but you can't fit the whole stack in one clean volume, so how many volumes do you need for the whole set? Well it's actually here, right on the cover...\n\nIf you're struggling to read roman numerals that large, I'll help you out. It's 14,029,886 total volumes that would be needed to print the whole stack.\n\nIf you're trying to visualize what that might look like, let me help you out",
+      "src": "media/img/the_stack_volume_1.png",
+      "zoompan": true
+    },
+    {
+      "type": "video",
+      "notes": "That's 288 miles stacked cover to cover, if put on a shelf, the shelf would stretch from New Jersey to Maryland. ",
+      "src": "media/video/20260226_2127_01kjerwrdcfryvk90zkmya6yrb.mp4",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "image",
+      "notes": "The publishers of the Stack published a second version, a V2, the V2 is more than 10 times larger, representing 3000 miles of books on a shelf.",
       "src": "media/img/bigcode_the-stack-v2_·_Datasets_at_Hugging_Face.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "The stack is ONE of 883,000 datasets on HuggingFace.\n\nAnd it isn't even the largest dataset, in fact it's an order of magnitude smaller than some of the larger datasets on the Hub.",
+      "src": "media/img/Datasets_number.png",
       "zoompan": true
     },
     {
