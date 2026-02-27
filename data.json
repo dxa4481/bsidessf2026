@@ -283,7 +283,7 @@
   ],
   "audio": [
     {
-      "src": "media/audio/welcome.mp3",
+      "src": "media/audio/welcome2.mp3",
       "startSlide": 1,
       "endSlide": 3,
       "loop": false,
