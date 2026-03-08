@@ -306,13 +306,38 @@
       "autoAdvance": true
     },
     {
-      "type": "placeholder",
-      "notes": "",
-      "title": "Should data models be open source?",
-      "backgroundColor": "#333333",
-      "text": "",
-      "timedAdvance": false,
-      "advanceDuration": 5000
+      "type": "video",
+      "notes": "Our next story started in 2023... when an anonymous developer in the AI community named comfyanonymous, started the ComfyUI project, to build with stable diffusion with more flexibility...",
+      "src": "media/video/Clever_Man_s_Stable_Diffusion_Idea.mp4",
+      "loop": false,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "image",
+      "notes": "Imagine the power of complex image generation workflows... no longer a simple prompt, but stages, that can introduce refinement and tweaks, repeatability, with fixed seed values, maybe one stage builds a beach, the next stage puts a person on the beach, tweak the second stage without losing the first stage...\n\nSounds powerful, right? Compelling?",
+      "src": "media/img/ComfyUI_Screenshot.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "One of those early decisions was to optionally embed the workflow, prompts, everything used to create the image, so anyone could recreate it pixel accurately, and modify it themselves...\n\nExcept... the word optionally is doing some heavy lifting there... for a default behavior\n\nAnd everything used to create the image?? Well... if you're not using a local open source model...",
+      "src": "media/img/Cursor_and_ComfyUI_-_Wikipedia.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "That has to include an API key doesn't it?\n\nHow many people use Comfy and doesn't know their prompts, workflows, and API keys are embedded inside their images?\n\nI sure wouldn't have known if we weren't specifically scanning for keys in huggingface...",
+      "src": "media/img/HF_Scanning_Results_comfyui.png",
+      "zoompan": true
+    },
+    {
+      "type": "video",
+      "notes": "It's time to zoom back out",
+      "src": "media/video/zoomout.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": true
     },
     {
       "type": "placeholder",
