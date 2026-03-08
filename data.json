@@ -116,8 +116,56 @@
       "zoompan": true
     },
     {
+      "type": "image",
+      "notes": "I want to introduce you to The Stack. This is a dataset on HuggingFace. It has 3 terrabytes of permissive code scraped from GitHub.\n\nI wanted to visualize how much data this is for you all... Like if I were to print it out, how many pages would this be?",
+      "src": "media/img/Cursor_and_bigcode_the-stack_·_Datasets_at_Hugging_Face.png",
+      "zoompan": true
+    },
+    {
       "type": "video",
-      "notes": "But what even is an open source model? Models aren't exactly source code.. so how can the source be open? is open source even the right word for an open model?",
+      "notes": "I was thinking about how I could visualize this much data... Like if we were to print it out, how big would the stack be?\n\nI started thinking, maybe I could print it out, and show you. And it turns out the cheapest way to print 550 pages is to publish a book in Amazon self publish marketplace",
+      "src": "media/video/Printing_All_of_GitHub.mp4",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "image",
+      "notes": "So that's what I did, and that's what I'm holding here... you can buy your own copy on amazon too if you want, but you can't fit the whole stack in one clean volume, so how many volumes do you need for the whole set? Well it's actually here, right on the cover...\n\nIf you're struggling to read roman numerals that large, I'll help you out. It's 14,029,886 total volumes that would be needed to print the whole stack.\n\nIf you're trying to visualize what that might look like, let me help you out",
+      "src": "media/img/the_stack_volume_1.png",
+      "zoompan": true
+    },
+    {
+      "type": "video",
+      "notes": "That's 288 miles stacked cover to cover, if put on a shelf, the shelf would stretch from New Jersey to Maryland. ",
+      "src": "media/video/20260226_2127_01kjerwrdcfryvk90zkmya6yrb.mp4",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "image",
+      "notes": "The publishers of the Stack published a second version, a V2, the V2 is more than 10 times larger, representing 3000 miles of books on a shelf.",
+      "src": "media/img/bigcode_the-stack-v2_·_Datasets_at_Hugging_Face.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "The stack is ONE of 883,000 datasets on HuggingFace.\n\nAnd it isn't even the largest dataset, in fact it's an order of magnitude smaller than some of the larger datasets on the Hub.\n\nI'm going to tell you some stories about this data, ",
+      "src": "media/img/Datasets_number.png",
+      "zoompan": true
+    },
+    {
+      "type": "video",
+      "notes": "but what you have to keep in mind is there is no metaphor I can give you that really wraps your mind around how much data this is. And there isn't enough time in a million conference talks to tell you all the stories contained in this data.",
+      "src": "media/video/Infinite_Chimps_and_Earth_Moon_Books.mp4",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "The first story I'm going to tell you... doesn't even occur on the hub... it strikes at the very definition of what open AI even means. Models aren't exactly source code.. so how can the source be open? is open source even the right word for an open model?",
       "src": "media/video/Open_Source_LLM_Video_Generated.mp4",
       "loop": false,
       "volume": 0,
@@ -178,71 +226,84 @@
       "autoAdvance": false
     },
     {
+      "type": "video",
+      "notes": "Way way in... to one file.. in one dataset",
+      "src": "media/video/reversed_video.mp4",
+      "loop": false,
+      "volume": 0,
+      "autoAdvance": true
+    },
+    {
+      "type": "video",
+      "notes": "Picture this... it's a warm day in March, you're a nutanix employee, and you have this great idea to make AI better at identifying security vulnerabilities.\n\nYour idea is simple. If you collect a bunch of semgrep and github security issues off of github, you could feed that into an AI learning to spot vulnerabilities, and see if the AI can produce the same issues the existing github and semgrep issues flagged...",
+      "src": "media/video/nuetanix.mov",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "So you get ready to do this massive scrape of github... to get the github issues and run the scans, you generate a GitHub API key, a personal access token, and you kick off a massive massive scrape, and semgrep scan.",
+      "src": "media/video/Scraping_Code_Off_GitHub_Video.mp4",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "You pull it off. A huge undertaking, but the largest collection of public semgrep scans ever completed.. now free and open to the world",
+      "src": "media/video/Data_Scientists_High_Five_Video.mp4",
+      "loop": false,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
       "type": "image",
-      "notes": "I want to introduce you to The Stack. This is a dataset on HuggingFace. It has 3 terrabytes of permissive code scraped from GitHub.\n\nI wanted to visualize how much data this is for you all... Like if I were to print it out, how many pages would this be?",
-      "src": "media/img/Cursor_and_bigcode_the-stack_·_Datasets_at_Hugging_Face.png",
+      "notes": "ANd when I say open... what I mean is apache licensed... 8.6 gigs of semgrep scans and github issues, Apache 2 licensed, free for the world to use",
+      "src": "media/img/apache.png",
       "zoompan": true
     },
     {
       "type": "video",
-      "notes": "I was thinking about how I could visualize this much data... Like if we were to print it out, how big would the stack be?\n\nI started thinking, maybe I could print it out, and show you. And it turns out the cheapest way to print 550 pages is to publish a book in Amazon self publish marketplace",
-      "src": "media/video/Printing_All_of_GitHub.mp4",
+      "notes": "Except there's one small problem that you didn't notice... that little PAT that you used at the start of the story... ",
+      "src": "media/video/The_Small_Problem_Big_Disaster.mp4",
       "loop": true,
       "volume": 0,
       "autoAdvance": false
     },
     {
       "type": "image",
-      "notes": "So that's what I did, and that's what I'm holding here... you can buy your own copy on amazon too if you want, but you can't fit the whole stack in one clean volume, so how many volumes do you need for the whole set? Well it's actually here, right on the cover...\n\nIf you're struggling to read roman numerals that large, I'll help you out. It's 14,029,886 total volumes that would be needed to print the whole stack.\n\nIf you're trying to visualize what that might look like, let me help you out",
-      "src": "media/img/the_stack_volume_1.png",
+      "notes": "Well that was a classical PAT. And you gave it the repo scope... ",
+      "src": "media/img/New_Personal_Access_Token__Classic_.png",
       "zoompan": true
     },
     {
       "type": "video",
-      "notes": "That's 288 miles stacked cover to cover, if put on a shelf, the shelf would stretch from New Jersey to Maryland. ",
-      "src": "media/video/20260226_2127_01kjerwrdcfryvk90zkmya6yrb.mp4",
-      "loop": true,
+      "notes": "At this point... some of you might be have put the pieces together...",
+      "src": "media/video/Silly_Video_About_Obvious_Revelation.mp4",
+      "loop": false,
       "volume": 0,
       "autoAdvance": false
     },
     {
       "type": "image",
-      "notes": "The publishers of the Stack published a second version, a V2, the V2 is more than 10 times larger, representing 3000 miles of books on a shelf.",
-      "src": "media/img/bigcode_the-stack-v2_·_Datasets_at_Hugging_Face.png",
+      "notes": "Semgrep scans of their internal repos... but it gets worse",
+      "src": "media/img/CSV_JSON_Cleanup.png",
       "zoompan": true
     },
     {
       "type": "image",
-      "notes": "The stack is ONE of 883,000 datasets on HuggingFace.\n\nAnd it isn't even the largest dataset, in fact it's an order of magnitude smaller than some of the larger datasets on the Hub.",
-      "src": "media/img/Datasets_number.png",
+      "notes": "Because semgrep saves secrets it finds in cleartext... all the hardcoded secrets from these internal semgrep scans got leaked...",
+      "src": "media/img/ghpsemgrep.png",
       "zoompan": true
     },
     {
-      "type": "placeholder",
-      "notes": "",
-      "title": "Wasn't their first contraversy",
-      "backgroundColor": "#333333",
-      "text": "",
-      "timedAdvance": false,
-      "advanceDuration": 5000
-    },
-    {
-      "type": "placeholder",
-      "notes": "",
-      "title": "Coming Soon",
-      "backgroundColor": "#333333",
-      "text": "This matters because EU regulations",
-      "timedAdvance": false,
-      "advanceDuration": 5000
-    },
-    {
-      "type": "placeholder",
-      "notes": "",
-      "title": "Heart of the debate",
-      "backgroundColor": "#333333",
-      "text": "",
-      "timedAdvance": false,
-      "advanceDuration": 5000
+      "type": "video",
+      "notes": "Let's zoom back out",
+      "src": "media/video/20260307_1941_01kk5rcf9ffev9mgd8jkb5xsjz.mp4",
+      "loop": false,
+      "volume": 0,
+      "autoAdvance": false
     },
     {
       "type": "placeholder",
@@ -293,5 +354,8 @@
       "fadeIn": 0.5,
       "fadeOut": 0.5
     }
-  ]
+  ],
+  "settings": {
+    "subtitleSize": 100
+  }
 }
