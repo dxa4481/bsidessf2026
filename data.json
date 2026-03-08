@@ -228,9 +228,9 @@
     {
       "type": "video",
       "notes": "Way way in... to one file.. in one dataset",
-      "src": "media/video/reversed_video.mp4",
+      "src": "media/video/reverse.mp4",
       "loop": false,
-      "volume": 0,
+      "volume": 97,
       "autoAdvance": true
     },
     {
@@ -246,7 +246,7 @@
       "notes": "So you get ready to do this massive scrape of github... to get the github issues and run the scans, you generate a GitHub API key, a personal access token, and you kick off a massive massive scrape, and semgrep scan.",
       "src": "media/video/Scraping_Code_Off_GitHub_Video.mp4",
       "loop": true,
-      "volume": 0,
+      "volume": 8,
       "autoAdvance": false
     },
     {
@@ -300,10 +300,10 @@
     {
       "type": "video",
       "notes": "Let's zoom back out",
-      "src": "media/video/20260307_1941_01kk5rcf9ffev9mgd8jkb5xsjz.mp4",
+      "src": "media/video/zoomout.mp4",
       "loop": false,
-      "volume": 0,
-      "autoAdvance": false
+      "volume": 105,
+      "autoAdvance": true
     },
     {
       "type": "placeholder",
