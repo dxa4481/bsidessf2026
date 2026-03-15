@@ -3,51 +3,31 @@
     {
       "type": "placeholder",
       "notes": "",
-      "title": "whoami",
-      "backgroundColor": "#333333",
+      "title": "Next up...",
+      "backgroundColor": "#000000",
       "text": "",
       "timedAdvance": false,
       "advanceDuration": 5000
     },
     {
-      "type": "placeholder",
+      "type": "video",
       "notes": "",
-      "title": "Black start",
-      "backgroundColor": "#333333",
-      "text": "",
-      "timedAdvance": false,
-      "advanceDuration": 5000
+      "src": "media/video/intro.m4v",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": true
     },
     {
-      "type": "placeholder",
+      "type": "video",
       "notes": "",
-      "title": "fivver guy",
-      "backgroundColor": "#333333",
-      "text": "",
-      "timedAdvance": false,
-      "advanceDuration": 5000
-    },
-    {
-      "type": "placeholder",
-      "notes": "",
-      "title": "cuts to sam altman",
-      "backgroundColor": "#333333",
-      "text": "",
-      "timedAdvance": false,
-      "advanceDuration": 5000
-    },
-    {
-      "type": "placeholder",
-      "notes": "",
-      "title": "An observed moment of silence...",
-      "backgroundColor": "#333333",
-      "text": "",
-      "timedAdvance": false,
-      "advanceDuration": 5000
+      "src": "media/video/whoami.m4v",
+      "loop": true,
+      "volume": 100,
+      "autoAdvance": false
     },
     {
       "type": "image",
-      "notes": "In 2016 Clément Delangue\n\nJulien Chaumond\n\nThomas Wolf \n\nraised about a million dollars to make a business around an AI chatbot...",
+      "notes": "In 2016 Clément Delangue\n\nJulien Chaumond\n\nThomas Wolf \n\nraised about a million dollars to make a business around an AI chatbot...\n\nThe name of that company? HuggingFace",
       "src": "media/img/hfleaders.webp",
       "zoompan": true
     },
@@ -67,13 +47,13 @@
     },
     {
       "type": "image",
-      "notes": "So when Google dropped their Transformers paper in 2017, and then more importantly a year later in 2018 Google released BERT, an open weights LLM",
+      "notes": "So when Google dropped their Transformers paper in 2017, and then more importantly a year later in 2018 Google released BERT, an open weights LLM.... well... you could say it got the attention of HuggingFace... to say the least",
       "src": "media/img/Open_Sourcing_BERT__State-of-the-Art_Pre-training_for_Natural_Language_Processin.png",
       "zoompan": true
     },
     {
       "type": "image",
-      "notes": "It's worth noting a lesser known company gpt1 dropped a little bit before Bert was released... both models followed the same basic formula.\n\nA foundational model following the \"Attention is all you need\" architecture, followed with two stages of learning, phase one is unsupervised, you feed it blindly all the data you can, and phase two is supervised, you slowly, using humans back then, reinforce it to behave like you want it to... like a chat bot...",
+      "notes": "It's worth noting a lesser known company, dropped an open model by the name of GPT1 a little bit before Bert was released... both models followed the same basic formula.\n\nA foundational model following the \"Attention is all you need\" architecture, followed with two stages of learning, phase one is unsupervised, you feed it blindly all the data you can, and phase two is supervised, you slowly, using humans back then, reinforce it to behave like you want it to... like a chat bot...",
       "src": "media/img/Cursor_and_Improving_language_understanding_with_unsupervised_learning___OpenAI.png",
       "zoompan": true
     },
@@ -117,13 +97,13 @@
     },
     {
       "type": "image",
-      "notes": "I want to introduce you to The Stack. This is a dataset on HuggingFace. It has 3 terrabytes of permissive code scraped from GitHub.\n\nI wanted to visualize how much data this is for you all... Like if I were to print it out, how many pages would this be?",
+      "notes": "I want to introduce you to The Stack. This is a dataset on HuggingFace. It has 3 terrabytes of permissive code scraped from GitHub.\n\nIt's humbling. Decades of human's writing code... the collection of almost all the code from every software engineer on the planet ever wanted to give away for free..\n\nI wanted to visualize how much data this is for you all... ",
       "src": "media/img/Cursor_and_bigcode_the-stack_·_Datasets_at_Hugging_Face.png",
       "zoompan": true
     },
     {
       "type": "video",
-      "notes": "I was thinking about how I could visualize this much data... Like if we were to print it out, how big would the stack be?\n\nI started thinking, maybe I could print it out, and show you. And it turns out the cheapest way to print 550 pages is to publish a book in Amazon self publish marketplace",
+      "notes": "Like if we were to print it out, how big would the stack be?\n\nI started thinking, maybe I could print it out, and show you. And it turns out the cheapest way to print 550 pages is to publish a book in Amazon self publish marketplace",
       "src": "media/video/Printing_All_of_GitHub.mp4",
       "loop": true,
       "volume": 0,
@@ -165,7 +145,7 @@
     },
     {
       "type": "video",
-      "notes": "The first story I'm going to tell you... doesn't even occur on the hub... it strikes at the very definition of what open AI even means. Models aren't exactly source code.. so how can the source be open? is open source even the right word for an open model?",
+      "notes": "But before I start telling you stories about the data... the first story I'm going to tell you... doesn't even occur on the hub... it strikes at the very definition of what open AI even means. Models aren't exactly source code.. so how can the source be open? is open source even the right word for an open model?",
       "src": "media/video/Open_Source_LLM_Video_Generated.mp4",
       "loop": false,
       "volume": 0,
@@ -399,11 +379,33 @@
   ],
   "audio": [
     {
-      "src": "media/audio/welcome2.mp3",
-      "startSlide": 1,
-      "endSlide": 3,
+      "src": "media/audio/french.mp3",
+      "startSlide": 3,
+      "endSlide": 13,
       "loop": false,
-      "volume": 100,
+      "volume": 36,
+      "pauseSlides": [],
+      "fadeEnabled": false,
+      "fadeIn": 0.5,
+      "fadeOut": 0.5
+    },
+    {
+      "src": "media/audio/humblinglyLarge2.mp3",
+      "startSlide": 14,
+      "endSlide": 20,
+      "loop": false,
+      "volume": 35,
+      "pauseSlides": [],
+      "fadeEnabled": false,
+      "fadeIn": 0.5,
+      "fadeOut": 0.5
+    },
+    {
+      "src": "media/audio/firstStory.mp3",
+      "startSlide": 21,
+      "endSlide": 29,
+      "loop": false,
+      "volume": 38,
       "pauseSlides": [],
       "fadeEnabled": false,
       "fadeIn": 0.5,
