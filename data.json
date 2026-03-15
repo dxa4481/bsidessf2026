@@ -340,22 +340,52 @@
       "autoAdvance": true
     },
     {
-      "type": "placeholder",
-      "notes": "",
-      "title": "Argument for repeatability",
-      "backgroundColor": "#333333",
-      "text": "",
-      "timedAdvance": false,
-      "advanceDuration": 5000
+      "type": "video",
+      "notes": "A man named Tom, a random data scientist on huggingface, enjoys palling around scraping data from non traditonal sources",
+      "src": "media/video/20260314_1950_01kkqp91dhenqb5yy2bx94mwmq.mp4",
+      "loop": false,
+      "volume": 0,
+      "autoAdvance": true
     },
     {
-      "type": "placeholder",
+      "type": "image",
+      "notes": "He decides to download 10 million telegram messages scraped from public telegraph channels...",
+      "src": "media/img/Telegram_channels_and_groups_catalog_—_World_—_TGStat.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "What he didn't know is in the 10 million messages, in one of the channels... was an automated reward system for submitting stolen stripe keys",
+      "src": "media/img/validatorstripe.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "A reward system that included sign up bonuses, and special give aways for posting stolen stripe keys",
+      "src": "media/img/HF_Scanning_Results.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "Those keys were then used to test stolen credit cards... imagine stealing a database worth of credit cards, you need to know what % of those cards work, the stripe keys were used for that...\n\nAnd by the way, we got these keys revoked, one week ago",
+      "src": "media/img/Pasted_Image_3_14_26__8_48 PM.png",
+      "zoompan": true
+    },
+    {
+      "type": "video",
       "notes": "",
-      "title": "Argument for derivitives",
-      "backgroundColor": "#333333",
-      "text": "",
-      "timedAdvance": false,
-      "advanceDuration": 5000
+      "src": "media/video/zoomout.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": true
+    },
+    {
+      "type": "video",
+      "notes": "",
+      "src": "media/img/HF_Scanning_Results_total.png",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": true
     },
     {
       "type": "placeholder",
