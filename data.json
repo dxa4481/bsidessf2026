@@ -208,9 +208,17 @@
     {
       "type": "video",
       "notes": "Way way in... to one file.. in one dataset",
-      "src": "media/video/reverse.mp4",
+      "src": "media/video/zoomout.mp4",
       "loop": false,
       "volume": 97,
+      "autoAdvance": true
+    },
+    {
+      "type": "video",
+      "notes": "",
+      "src": "media/video/reverse.mp4",
+      "loop": false,
+      "volume": 100,
       "autoAdvance": true
     },
     {
@@ -279,6 +287,14 @@
     },
     {
       "type": "video",
+      "notes": "",
+      "src": "media/video/reverse.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
       "notes": "Let's zoom back out",
       "src": "media/video/zoomout.mp4",
       "loop": false,
@@ -314,6 +330,14 @@
     {
       "type": "video",
       "notes": "It's time to zoom back out",
+      "src": "media/video/reverse.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": true
+    },
+    {
+      "type": "video",
+      "notes": "",
       "src": "media/video/zoomout.mp4",
       "loop": false,
       "volume": 100,
@@ -360,8 +384,50 @@
       "autoAdvance": true
     },
     {
+      "type": "video",
+      "notes": "",
+      "src": "media/video/reverse.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "In 1896 a british statesman Lord Rosebery was giving a series of widely attended political speeches across england...\n\nThere were no recording devices at the time... the only way to learn about the speeches was to send a reporter and have a reporter transcribe them\n",
+      "src": "media/video/20260316_1520_01kkwbq775et09qbgrtyvpwp6x.mp4",
+      "loop": false,
+      "volume": 6,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "and that's exactly what The Times did.\n\nThe reporter followed rosenbery for a year, and documented verbatim transcripts which the paper published.",
+      "src": "media/video/Reporter_Transcribes_English_Speech.mp4",
+      "loop": false,
+      "volume": 7,
+      "autoAdvance": false
+    },
+    {
       "type": "image",
-      "notes": "So far I've only been talking about security issues found on the hub...\n\nI want to introduce you to another dataset on the hub..\n\nCommon Crawl.\n\nPut simply, common crawl is a scrape of the entire internet",
+      "notes": "A book publisher wanted to make these more widely available.. John Lane took the transcripts from The Times and published them...\n\nThe Times sued him. Almost immediately. ",
+      "src": "media/img/15147167059.jpg",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "It seems a little crazy right? That even though the information was public, the news paper could control that information... this was 120 years ago.",
+      "src": "media/img/The_True_Story_of_Walter_v__Lane___Faculty_of_Law.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "not much changed in 120 years...\n\nthat old illegal book from 120 years ago? I have a copy of it, and guess what? There's a word for word copy of it in thousands of AI training sets",
+      "src": "media/img/New_York_Times_Sues_OpenAI_and_Microsoft_Over_Use_of_Copyrighted_Work_-_The_New_York_Times.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "I want to introduce you to another dataset on the hub..\n\nCommon Crawl.\n\nPut simply, common crawl is a scrape of the entire internet",
       "src": "media/img/commonCrawl.png",
       "zoompan": true
     },
@@ -387,6 +453,14 @@
       "type": "video",
       "notes": "Whether we're talking about copyright... or security, or data privacy, some of these problems are frankly impossible to solve.\n\nAt least with our current technology",
       "src": "media/video/zoomout.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": true
+    },
+    {
+      "type": "video",
+      "notes": "",
+      "src": "media/video/reverse.mp4",
       "loop": false,
       "volume": 100,
       "autoAdvance": true
@@ -456,6 +530,50 @@
       "endSlide": 29,
       "loop": true,
       "volume": 38,
+      "pauseSlides": [],
+      "fadeEnabled": false,
+      "fadeIn": 0.5,
+      "fadeOut": 0.5
+    },
+    {
+      "src": "media/audio/nutanixMusic.mp3",
+      "startSlide": 32,
+      "endSlide": 40,
+      "loop": true,
+      "volume": 32,
+      "pauseSlides": [],
+      "fadeEnabled": false,
+      "fadeIn": 0.5,
+      "fadeOut": 0.5
+    },
+    {
+      "src": "media/audio/stripeCriminals.mp3",
+      "startSlide": 49,
+      "endSlide": 53,
+      "loop": false,
+      "volume": 38,
+      "pauseSlides": [],
+      "fadeEnabled": false,
+      "fadeIn": 0.5,
+      "fadeOut": 0.5
+    },
+    {
+      "src": "media/audio/comfyUIBackground.mp3",
+      "startSlide": 43,
+      "endSlide": 46,
+      "loop": true,
+      "volume": 45,
+      "pauseSlides": [],
+      "fadeEnabled": false,
+      "fadeIn": 0.5,
+      "fadeOut": 0.5
+    },
+    {
+      "src": "media/audio/thetimestake4.mp3",
+      "startSlide": 56,
+      "endSlide": 64,
+      "loop": false,
+      "volume": 41,
       "pauseSlides": [],
       "fadeEnabled": false,
       "fadeIn": 0.5,
