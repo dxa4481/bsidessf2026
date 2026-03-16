@@ -360,12 +360,62 @@
       "autoAdvance": true
     },
     {
+      "type": "image",
+      "notes": "So far I've only been talking about security issues found on the hub...\n\nI want to introduce you to another dataset on the hub..\n\nCommon Crawl.\n\nPut simply, common crawl is a scrape of the entire internet",
+      "src": "media/img/commonCrawl.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "Common crawl is actually more than one scrape, it's a routine scrape, and each oneis 363 terrabytes.\n\nBy itself it's unfathomably large..",
+      "src": "media/img/Common_Crawl_-_Blog_-_February_2026_Crawl_Archive_Now_Available.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "What happens... when the one of the millions of websites they crawl reaches out saying, \"HEY! Don't include us in your data\"\n\nAnd what happens.. when that one, just so happens to be the new york times",
+      "src": "media/img/The_New_York_Times__Digital_and_Home_Delivery_Subscriptions.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "Well... they comply with the request...\n\nBut what does that mean for open source models that trained on it? Is it impossible to recreate them now?",
+      "src": "media/img/nytreachedout.png",
+      "zoompan": true
+    },
+    {
       "type": "video",
-      "notes": "",
-      "src": "media/img/HF_Scanning_Results_total.png",
+      "notes": "Whether we're talking about copyright... or security, or data privacy, some of these problems are frankly impossible to solve.\n\nAt least with our current technology",
+      "src": "media/video/zoomout.mp4",
       "loop": false,
       "volume": 100,
       "autoAdvance": true
+    },
+    {
+      "type": "video",
+      "notes": "And that's what made the OSI election so explosive...\n\nIt wasn't a friendly debate about we should lower the bar for corporations to claim regulatory benefit...\n\nIt was actually a debate about whether for many of these models, could even legally, in a privacy friendly and secure way, possibly open their data.\n\nAnd even if they could, to what end if random copyright owners could just slowly strike bits and pieces until the dataset looks completely different than the one that was used to generate the open weights",
+      "src": "media/video/20260225_2119_01kjc4b7pafn4ssj6jxvte8mjx.mp4",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "image",
+      "notes": "There are workarounds...\n\nLet me introduce you to laion 5 billion...\n\nA dataset of BILLIONS of images... except the dataset itself contains zero images.\n\nThe workaround?\n\nThe dataset just has links to external websites with the images.\n\nIt would be a nightmare to actually host these images, for all the reasons you're probably imagining...\n\nBut this doesn't solve all our problems. Those links? They're going to rot over time. And this dataset will slowly attrify over time the same way our hosted one with copyright strikes will...",
+      "src": "media/img/laion_relaion2B-multi-research_·_Datasets_at_Hugging_Face.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "We cannot look at open datasets the same way we look at open source software.\n\nIt's too different... the legal, privacy and security challenges are just... different. \n\nAnd let me put this into better perspective...\n\nThey say one leaked API key is a tragedy... millions of leaked API keys is a statistic...",
+      "src": "media/img/Datasets_–_Hugging_Face.png",
+      "zoompan": true
+    },
+    {
+      "type": "image",
+      "notes": "At the time of making this slide, which was a week ago, we scanned about 24% of the datasets on Huggingface for live API keys and passowrds with TruffleHog...\n\n70,000 unique live keys... and counting\n\nIt's a statistic. We can't wrap our minds around it. That's why I had to show you zoomed in examples of individual keys... there just isn't time to tell 70,000 stories\n\nAnd my shame is, we couldn't scan the whole hub in time... it's too much data, it's going to take us months to complete...",
+      "src": "media/img/HF_Scanning_Results_stats.png",
+      "zoompan": true
     },
     {
       "type": "placeholder",
@@ -382,7 +432,7 @@
       "src": "media/audio/french.mp3",
       "startSlide": 3,
       "endSlide": 13,
-      "loop": false,
+      "loop": true,
       "volume": 36,
       "pauseSlides": [],
       "fadeEnabled": false,
@@ -393,7 +443,7 @@
       "src": "media/audio/humblinglyLarge2.mp3",
       "startSlide": 14,
       "endSlide": 20,
-      "loop": false,
+      "loop": true,
       "volume": 35,
       "pauseSlides": [],
       "fadeEnabled": false,
@@ -404,7 +454,7 @@
       "src": "media/audio/firstStory.mp3",
       "startSlide": 21,
       "endSlide": 29,
-      "loop": false,
+      "loop": true,
       "volume": 38,
       "pauseSlides": [],
       "fadeEnabled": false,
