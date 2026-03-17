@@ -377,6 +377,14 @@
     },
     {
       "type": "video",
+      "notes": "An elaborate underground system of public telegram channels, a reward system to steal tokens, so that millions of victims can have their credit cards defrauded",
+      "src": "media/video/TelegramStory.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
       "notes": "",
       "src": "media/video/zoomout.mp4",
       "loop": false,
@@ -492,6 +500,14 @@
       "zoompan": true
     },
     {
+      "type": "video",
+      "notes": "",
+      "src": "media/video/SharedSecrets.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
       "type": "placeholder",
       "notes": "",
       "title": "inherient legal and privacy issues",
@@ -549,7 +565,7 @@
     {
       "src": "media/audio/stripeCriminals.mp3",
       "startSlide": 49,
-      "endSlide": 53,
+      "endSlide": 54,
       "loop": false,
       "volume": 38,
       "pauseSlides": [],
@@ -570,8 +586,8 @@
     },
     {
       "src": "media/audio/thetimestake4.mp3",
-      "startSlide": 56,
-      "endSlide": 64,
+      "startSlide": 57,
+      "endSlide": 65,
       "loop": false,
       "volume": 41,
       "pauseSlides": [],
