@@ -207,14 +207,6 @@
     },
     {
       "type": "video",
-      "notes": "Way way in... to one file.. in one dataset",
-      "src": "media/video/zoomout.mp4",
-      "loop": false,
-      "volume": 97,
-      "autoAdvance": true
-    },
-    {
-      "type": "video",
       "notes": "",
       "src": "media/video/reverse.mp4",
       "loop": false,
@@ -288,7 +280,7 @@
     {
       "type": "video",
       "notes": "",
-      "src": "media/video/reverse.mp4",
+      "src": "media/video/zoomout.mp4",
       "loop": false,
       "volume": 100,
       "autoAdvance": false
@@ -296,7 +288,7 @@
     {
       "type": "video",
       "notes": "Let's zoom back out",
-      "src": "media/video/zoomout.mp4",
+      "src": "media/video/reverse.mp4",
       "loop": false,
       "volume": 105,
       "autoAdvance": true
@@ -330,7 +322,7 @@
     {
       "type": "video",
       "notes": "It's time to zoom back out",
-      "src": "media/video/reverse.mp4",
+      "src": "media/video/zoomout.mp4",
       "loop": false,
       "volume": 100,
       "autoAdvance": true
@@ -338,7 +330,7 @@
     {
       "type": "video",
       "notes": "",
-      "src": "media/video/zoomout.mp4",
+      "src": "media/video/reverse.mp4",
       "loop": false,
       "volume": 100,
       "autoAdvance": true
@@ -495,15 +487,31 @@
     },
     {
       "type": "image",
-      "notes": "At the time of making this slide, which was a week ago, we scanned about 24% of the datasets on Huggingface for live API keys and passowrds with TruffleHog...\n\n70,000 unique live keys... and counting\n\nIt's a statistic. We can't wrap our minds around it. That's why I had to show you zoomed in examples of individual keys... there just isn't time to tell 70,000 stories\n\nAnd my shame is, we couldn't scan the whole hub in time... it's too much data, it's going to take us months to complete...",
+      "notes": "At the time of making this slide, which was a week ago, we scanned about 24% of the datasets on Huggingface for live API keys and passowrds with TruffleHog...\n\n70,000 unique live keys... and counting\n\nIt's a statistic. We can't wrap our minds around it. That's why I had to show you zoomed in examples of individual keys... there just isn't time to tell 70,000 stories\n\nAnd my shame is, we couldn't scan the whole hub in time... it's too much data, it's going to take us months to complete...\n\nSome of you might be wondering how we were able to find these needles in haystacks... \n\nAnd to put this into further perspective... let me dig into one specific keytype we kept seeing over and over again... Twitter keys.\n\nWell here's an interesting fact, most of those 70,000 keys? They existed in more than one dataset.\n\nWhy?\n\nWell imagine a key gets leaked on github... I shared multiple stories about different datasets containing keys from github...\n\nA lot of these datasets scrape the same data.",
       "src": "media/img/HF_Scanning_Results_stats.png",
       "zoompan": true
     },
     {
       "type": "video",
-      "notes": "",
-      "src": "media/video/SharedSecrets.mp4",
+      "notes": "Why twitter? Well first is it's really easy to make tutorials out of twitter API keys. It's basically the only social media site with a well supported API.\n\nThe second reason was a surprising data curation bias we weren't expecting going in...\n\nA lot of people pulled out of larger datasets, currated code that they would automate at scale, testing to make sure the code actually ran...\n\nWell think about it. Code that hardcoded secrets would run without exception, but code that depends on secrets would throw exceptions...\n\nThis actually biased many datasets towards having hardcoded keys, and replicated the keys into multiple datasets...\n\nAnd the last element here...\n\nThe first gen LLM's that learned the behavior, pushed more similiar data into the wild, creating a vicious cyclical feedback loop",
+      "src": "media/video/TwitterWhy.mp4",
+      "loop": true,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "And you can see examples of that here, copies of the same exact data, currated datasets, that are subsets of one another.",
+      "src": "media/video/TwitterWhere.mp4",
       "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "And so we graphed out the datasets that shared the same secrets and we were a little surprised to see actually MOST live secrets in huggingface were shared in multiple datasets... And it was really cool to visualize this.\n\nAnd this got us thinking",
+      "src": "media/video/SharedSecrets.mp4",
+      "loop": true,
       "volume": 100,
       "autoAdvance": false
     },
@@ -553,8 +561,8 @@
     },
     {
       "src": "media/audio/nutanixMusic.mp3",
-      "startSlide": 32,
-      "endSlide": 40,
+      "startSlide": 31,
+      "endSlide": 39,
       "loop": true,
       "volume": 32,
       "pauseSlides": [],
@@ -564,8 +572,8 @@
     },
     {
       "src": "media/audio/stripeCriminals.mp3",
-      "startSlide": 49,
-      "endSlide": 54,
+      "startSlide": 48,
+      "endSlide": 53,
       "loop": false,
       "volume": 38,
       "pauseSlides": [],
@@ -575,8 +583,8 @@
     },
     {
       "src": "media/audio/comfyUIBackground.mp3",
-      "startSlide": 43,
-      "endSlide": 46,
+      "startSlide": 42,
+      "endSlide": 45,
       "loop": true,
       "volume": 45,
       "pauseSlides": [],
@@ -586,10 +594,21 @@
     },
     {
       "src": "media/audio/thetimestake4.mp3",
-      "startSlide": 57,
-      "endSlide": 65,
-      "loop": false,
+      "startSlide": 56,
+      "endSlide": 64,
+      "loop": true,
       "volume": 41,
+      "pauseSlides": [],
+      "fadeEnabled": false,
+      "fadeIn": 0.5,
+      "fadeOut": 0.5
+    },
+    {
+      "src": "media/audio/firstStory.mp3",
+      "startSlide": 67,
+      "endSlide": 72,
+      "loop": true,
+      "volume": 45,
       "pauseSlides": [],
       "fadeEnabled": false,
       "fadeIn": 0.5,
