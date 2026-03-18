@@ -145,6 +145,20 @@
     },
     {
       "type": "video",
+      "notes": "At the time of making this slide, which was a week ago, we scanned about 24% of the datasets on Huggingface for live API keys and passowrds with TruffleHog...\n\n70,000 unique live keys... and counting\n\nIt's a statistic. We can't wrap our minds around it. That's why I had to show you zoomed in examples of individual keys... there just isn't time to tell 70,000 stories\n\nAnd my shame is, we couldn't scan the whole hub in time... it's too much data, it's going to take us months to complete...\n\nSome of you might be wondering how we were able to find these needles in haystacks... \n\nAnd to put this into further perspective... let me dig into one specific keytype we kept seeing over and over again... Twitter keys.\n\nWell here's an interesting fact, most of those 70,000 keys? They existed in more than one dataset.\n\nWhy?\n\nWell imagine a key gets leaked on github... I shared multiple stories about different datasets containing keys from github...\n\nA lot of these datasets scrape the same data.",
+      "src": "media/video/StatsCascade.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "image",
+      "notes": "And here's my shame... when I submitted this talk I really thought we would be able to scan all of huggingface in time...\n\nBut I was wrong. As of about a week ago we were only about 25% of the way through, for which we found 70,000 unique live API keys and passwords exposed. It's going months to get this all the way to 100%, and this means probably the most interesting stories are still to come...\n\nThey say one exposed key is a tragedy, well 70,000 is a statistic... so I'm going to take you on a journey showing you some of those individual tragedies...",
+      "src": "media/img/HF_Scanning_Results_total.png",
+      "zoompan": true
+    },
+    {
+      "type": "video",
       "notes": "But before I start telling you stories about the data... the first story I'm going to tell you... doesn't even occur on the hub... it strikes at the very definition of what open AI even means. Models aren't exactly source code.. so how can the source be open? is open source even the right word for an open model?",
       "src": "media/video/Open_Source_LLM_Video_Generated.mp4",
       "loop": false,
@@ -486,12 +500,6 @@
       "zoompan": true
     },
     {
-      "type": "image",
-      "notes": "At the time of making this slide, which was a week ago, we scanned about 24% of the datasets on Huggingface for live API keys and passowrds with TruffleHog...\n\n70,000 unique live keys... and counting\n\nIt's a statistic. We can't wrap our minds around it. That's why I had to show you zoomed in examples of individual keys... there just isn't time to tell 70,000 stories\n\nAnd my shame is, we couldn't scan the whole hub in time... it's too much data, it's going to take us months to complete...\n\nSome of you might be wondering how we were able to find these needles in haystacks... \n\nAnd to put this into further perspective... let me dig into one specific keytype we kept seeing over and over again... Twitter keys.\n\nWell here's an interesting fact, most of those 70,000 keys? They existed in more than one dataset.\n\nWhy?\n\nWell imagine a key gets leaked on github... I shared multiple stories about different datasets containing keys from github...\n\nA lot of these datasets scrape the same data.",
-      "src": "media/img/HF_Scanning_Results_stats.png",
-      "zoompan": true
-    },
-    {
       "type": "video",
       "notes": "Why twitter? Well first is it's really easy to make tutorials out of twitter API keys. It's basically the only social media site with a well supported API.\n\nThe second reason was a surprising data curation bias we weren't expecting going in...\n\nA lot of people pulled out of larger datasets, currated code that they would automate at scale, testing to make sure the code actually ran...\n\nWell think about it. Code that hardcoded secrets would run without exception, but code that depends on secrets would throw exceptions...\n\nThis actually biased many datasets towards having hardcoded keys, and replicated the keys into multiple datasets...\n\nAnd the last element here...\n\nThe first gen LLM's that learned the behavior, pushed more similiar data into the wild, creating a vicious cyclical feedback loop",
       "src": "media/video/TwitterWhy.mp4",
@@ -540,7 +548,7 @@
     {
       "src": "media/audio/humblinglyLarge2.mp3",
       "startSlide": 14,
-      "endSlide": 20,
+      "endSlide": 22,
       "loop": true,
       "volume": 35,
       "pauseSlides": [],
@@ -550,8 +558,8 @@
     },
     {
       "src": "media/audio/firstStory.mp3",
-      "startSlide": 21,
-      "endSlide": 29,
+      "startSlide": 23,
+      "endSlide": 31,
       "loop": true,
       "volume": 38,
       "pauseSlides": [],
@@ -561,8 +569,8 @@
     },
     {
       "src": "media/audio/nutanixMusic.mp3",
-      "startSlide": 31,
-      "endSlide": 39,
+      "startSlide": 33,
+      "endSlide": 41,
       "loop": true,
       "volume": 32,
       "pauseSlides": [],
@@ -572,8 +580,8 @@
     },
     {
       "src": "media/audio/stripeCriminals.mp3",
-      "startSlide": 48,
-      "endSlide": 53,
+      "startSlide": 50,
+      "endSlide": 55,
       "loop": false,
       "volume": 38,
       "pauseSlides": [],
@@ -583,8 +591,8 @@
     },
     {
       "src": "media/audio/comfyUIBackground.mp3",
-      "startSlide": 42,
-      "endSlide": 45,
+      "startSlide": 44,
+      "endSlide": 47,
       "loop": true,
       "volume": 45,
       "pauseSlides": [],
@@ -594,8 +602,8 @@
     },
     {
       "src": "media/audio/thetimestake4.mp3",
-      "startSlide": 56,
-      "endSlide": 64,
+      "startSlide": 58,
+      "endSlide": 66,
       "loop": true,
       "volume": 41,
       "pauseSlides": [],
@@ -605,8 +613,8 @@
     },
     {
       "src": "media/audio/firstStory.mp3",
-      "startSlide": 67,
-      "endSlide": 72,
+      "startSlide": 69,
+      "endSlide": 74,
       "loop": true,
       "volume": 45,
       "pauseSlides": [],
