@@ -145,7 +145,7 @@
     },
     {
       "type": "video",
-      "notes": "At the time of making this slide, which was a week ago, we scanned about 24% of the datasets on Huggingface for live API keys and passowrds with TruffleHog...\n\n70,000 unique live keys... and counting\n\nIt's a statistic. We can't wrap our minds around it. That's why I had to show you zoomed in examples of individual keys... there just isn't time to tell 70,000 stories\n\nAnd my shame is, we couldn't scan the whole hub in time... it's too much data, it's going to take us months to complete...\n\nSome of you might be wondering how we were able to find these needles in haystacks... \n\nAnd to put this into further perspective... let me dig into one specific keytype we kept seeing over and over again... Twitter keys.\n\nWell here's an interesting fact, most of those 70,000 keys? They existed in more than one dataset.\n\nWhy?\n\nWell imagine a key gets leaked on github... I shared multiple stories about different datasets containing keys from github...\n\nA lot of these datasets scrape the same data.",
+      "notes": "At the time of making this slide, which was a week ago, we scanned about 24% of the datasets on Huggingface for live API keys and passowrds with TruffleHog...\n\n70,000 unique live keys... and counting\n\nWe can't wrap our minds around it. That's why I had to show you zoomed in examples of individual keys... there just isn't time to tell 70,000 stories\n\nAnd my shame is, we couldn't scan the whole hub in time... it's too much data, it's going to take us months to complete...\n\n\n",
       "src": "media/video/StatsCascade.mp4",
       "loop": false,
       "volume": 100,
@@ -351,6 +351,62 @@
     },
     {
       "type": "video",
+      "notes": "Picture this... you're in Russian in 2024, it's May. Finally, some nice weather, it's not freezing cold..\n\nYou got a sweet internship at Jetbrains as an AI intern...\n\n\nYou're gonna pull some data off github for a little AI project... Here's the basic idea...",
+      "src": "media/video/Optimistic_Russian_Student_Coder_Video.mp4",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "If you can pull patch data, and github issues, for bugs, you can teach an AI system how to fix bugs...\n\n\nIt'll be the ultimate bug squashign dataset everyone can use to make their LLM's fix bugs",
+      "src": "media/video/Bugs_Crawling_Out_Of_Computer.mp4",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "Now for the amount of data we're talking about... one PAT isn't going to cut it, it would take too long with teh rate limits... you're gonna need a whole bunch of tokens.\n\nI mean after all, your internship ends in a few months and you gotta get all this data ASAP...\n\nYou're smart, you don't make that same mistake we saw before, you put logic in your clone code to not clone anything from your private repositories\n\n",
+      "src": "media/video/TokenPool.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "So you get to work making accounts... and a lot of them..\n\nEach of these github accounts need their own email address too so it's fake accounts to make fake accounts to make fake accounts...\n\nThis is gonna take forever... it DOES take forever...\n\nSo you take ONNNEE LITTTTLLLEEEE shortcut...\n\nWe'll come back to that.",
+      "src": "media/video/InternAccounts.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "You're ready to go now... except... When you zip up the repos you cloned... well... you forgot to filter out the git config files iwth your tokens...\n\n\nNo big deal though, because you're using token pools from throw away github accounts...\n\nExcept for that shortcut I mentioned...\n\nYou used one token from your real account. Shoot. Even though you didn't scrape any private data, your token with ACCESS to private data... is now out there...",
+      "src": "media/video/GitConfigLeak.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "",
+      "src": "media/video/zoomout.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "",
+      "src": "media/video/reverse.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
       "notes": "A man named Tom, a random data scientist on huggingface, enjoys palling around scraping data from non traditonal sources",
       "src": "media/video/20260314_1950_01kkqp91dhenqb5yy2bx94mwmq.mp4",
       "loop": false,
@@ -473,14 +529,6 @@
     },
     {
       "type": "video",
-      "notes": "",
-      "src": "media/video/reverse.mp4",
-      "loop": false,
-      "volume": 100,
-      "autoAdvance": true
-    },
-    {
-      "type": "video",
       "notes": "And that's what made the OSI election so explosive...\n\nIt wasn't a friendly debate about we should lower the bar for corporations to claim regulatory benefit...\n\nIt was actually a debate about whether for many of these models, could even legally, in a privacy friendly and secure way, possibly open their data.\n\nAnd even if they could, to what end if random copyright owners could just slowly strike bits and pieces until the dataset looks completely different than the one that was used to generate the open weights",
       "src": "media/video/20260225_2119_01kjc4b7pafn4ssj6jxvte8mjx.mp4",
       "loop": true,
@@ -501,15 +549,23 @@
     },
     {
       "type": "video",
-      "notes": "Why twitter? Well first is it's really easy to make tutorials out of twitter API keys. It's basically the only social media site with a well supported API.\n\nThe second reason was a surprising data curation bias we weren't expecting going in...\n\nA lot of people pulled out of larger datasets, currated code that they would automate at scale, testing to make sure the code actually ran...\n\nWell think about it. Code that hardcoded secrets would run without exception, but code that depends on secrets would throw exceptions...\n\nThis actually biased many datasets towards having hardcoded keys, and replicated the keys into multiple datasets...\n\nAnd the last element here...\n\nThe first gen LLM's that learned the behavior, pushed more similiar data into the wild, creating a vicious cyclical feedback loop",
-      "src": "media/video/TwitterWhy.mp4",
+      "notes": "Well here's an interesting fact, most of those 70,000 keys? They existed in more than one dataset.\n\nWhy?\n\nWell imagine a key gets leaked on github... I shared multiple stories about different datasets containing keys from github...\n\nA lot of these datasets scrape the same data.\n\n\nOne example that popped up a lot... was THOUSANDS of unique twitter API keys we found just over and over and over again in hundreds of datasets...\n",
+      "src": "media/video/SharedSecrets.mp4",
       "loop": true,
       "volume": 100,
       "autoAdvance": false
     },
     {
       "type": "video",
-      "notes": "And you can see examples of that here, copies of the same exact data, currated datasets, that are subsets of one another.",
+      "notes": "\nWhy twitter? Well first is it's really easy to make tutorials out of twitter API keys. It's basically the only social media site with a well supported API.\n\nThe second reason was a surprising data curation bias we weren't expecting going in...\n\nA lot of people pulled out of larger datasets, currated code that they would automate at scale, testing to make sure the code actually ran...\n\nWell think about it. Code that hardcoded secrets would run without exception, but code that depends on secrets would throw exceptions...\n\nThis actually biased many datasets towards having hardcoded keys, and replicated the keys into multiple datasets...\n\nAnd the last element here...\n\nThe first gen LLM's that learned the behavior, pushed more similiar data into the wild, creating a vicious cyclical feedback loop",
+      "src": "media/video/TwitterWhy.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "\n\nAnd you can see examples of that here, copies of the same exact data, currated datasets, that are subsets of one another.",
       "src": "media/video/TwitterWhere.mp4",
       "loop": false,
       "volume": 100,
@@ -517,20 +573,43 @@
     },
     {
       "type": "video",
-      "notes": "And so we graphed out the datasets that shared the same secrets and we were a little surprised to see actually MOST live secrets in huggingface were shared in multiple datasets... And it was really cool to visualize this.\n\nAnd this got us thinking",
-      "src": "media/video/SharedSecrets.mp4",
+      "notes": "This got us thinking though.... so many keys shared because they got scraped and distilled from larger scrapes...\n\nWhat about cases where data accidentally gets exposed?\n\nThat wouldn't show up in multiple scrapes it would be unique..\n\nSo of our 70,000 keys if we specifically filter for keys that are from exactly only one dataset...\n\nmaybe... just maybe...\n\nThat key wasn't from the public scrape, it was from accidental data that got packaged in....",
+      "src": "media/video/OrphanInsight.mp4",
       "loop": true,
       "volume": 100,
       "autoAdvance": false
     },
     {
-      "type": "placeholder",
+      "type": "video",
+      "notes": "It's a bold strategy... but it might just work...\n\nSo we tried it. And it did work. That's how we were able to bring you most of the examples we covered...\n\nBut even within the orphaned keys, there were hundreds, far too many to go through all of them..\n\nThat's how I was able to bring all of these stories to you though.\n\n\nWhat about all theo ther keys though? The keys scraped from websites, github repositories, and chats that were publicly exposed outside of huggingface that huggingface just made copies of...\n\nI found credit card numbers, social security numbers, you name it...\n\nCountless privacy issues, security issues, it's too much, it's overwealming...\n\nYo ucannot train an LLM without it's pretraining stage, and we cannot do the pretraining stage without this toxic data...",
+      "src": "media/video/OrphanFilter.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "between legal security and private issues, there's a unique set of problems with opening up datasets, and with datasets that are already open...\n\nBut at the same time, we need open models. We cna't just let the big labs keep a tax on AI usage without open source alternatives...\n\nThis is what almost broke the OSI.\n\n",
+      "src": "media/video/WhyChallenge.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
+      "notes": "You know I was thinking of a good way to end this talk... and I was struggling to come up with a closing idea...\n\nSo I'll just leave you with this:\n\nThese datasets comprise almost all of human writing and public speech.\n\nEverything. Ancient egyption, every scanned copy of every surviving book, every news paper, for the last 2000 years, every public image on the internet, every public website, every thought. Everything...\n\nIt's all there.. \n\nI started thinking to myself...\n\nIs there going to come a time we appreciate all these data is here?\n\nin 100 years, are tehse huge collections of data going to tell our story?\n\nThe API keys, social security numbers, and data breaches for better or worse are all a part of that story...\n\nI'm kind of resigned to the fact we're never going to clean all this up.\n\nIt's just too much. And there's too many copies...\n\nSo to take a more optomistic view, I think about the archiologist 200 years from now going through it all, finding all the stories I didn't have time to tell...\n\nI won't weigh in on whether I think the data should be open or not, I'll leave that up to you, and the OSI...\n\nfor now though, I'll just imagine that future archaeologist, and the smile on her face, for the API keys she finds that are still live 200 years after leaking...\n\nThank you all.",
+      "src": "media/video/Everything.mp4",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
+      "type": "video",
       "notes": "",
-      "title": "inherient legal and privacy issues",
-      "backgroundColor": "#333333",
-      "text": "",
-      "timedAdvance": false,
-      "advanceDuration": 5000
+      "src": "media/video/whoami.m4v",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
     }
   ],
   "audio": [
@@ -580,8 +659,8 @@
     },
     {
       "src": "media/audio/stripeCriminals.mp3",
-      "startSlide": 50,
-      "endSlide": 55,
+      "startSlide": 57,
+      "endSlide": 62,
       "loop": false,
       "volume": 38,
       "pauseSlides": [],
@@ -602,8 +681,8 @@
     },
     {
       "src": "media/audio/thetimestake4.mp3",
-      "startSlide": 58,
-      "endSlide": 66,
+      "startSlide": 65,
+      "endSlide": 73,
       "loop": true,
       "volume": 41,
       "pauseSlides": [],
@@ -613,17 +692,36 @@
     },
     {
       "src": "media/audio/firstStory.mp3",
-      "startSlide": 69,
-      "endSlide": 74,
+      "startSlide": 75,
+      "endSlide": 83,
       "loop": true,
       "volume": 45,
       "pauseSlides": [],
       "fadeEnabled": false,
       "fadeIn": 0.5,
       "fadeOut": 0.5
+    },
+    {
+      "src": "media/audio/russian.mp3",
+      "startSlide": 50,
+      "endSlide": 54,
+      "loop": false,
+      "volume": 38,
+      "pauseSlides": [],
+      "fadeEnabled": false,
+      "fadeIn": 0.5,
+      "fadeOut": 0.5
+    },
+    {
+      "src": "media/audio/humblinglyLarge2.mp3",
+      "startSlide": 84,
+      "endSlide": 85,
+      "loop": true,
+      "volume": 46,
+      "pauseSlides": [],
+      "fadeEnabled": false,
+      "fadeIn": 0.5,
+      "fadeOut": 0.5
     }
-  ],
-  "settings": {
-    "subtitleSize": 100
-  }
+  ]
 }
