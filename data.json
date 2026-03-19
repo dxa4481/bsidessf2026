@@ -456,7 +456,7 @@
     {
       "type": "video",
       "notes": "",
-      "src": "media/video/reverse.mp4",
+      "src": "media/video/Time_Machine_Journey_Through_Computing_History.mp4",
       "loop": false,
       "volume": 100,
       "autoAdvance": false
@@ -723,5 +723,8 @@
       "fadeIn": 0.5,
       "fadeOut": 0.5
     }
-  ]
+  ],
+  "settings": {
+    "subtitleSize": 100
+  }
 }
