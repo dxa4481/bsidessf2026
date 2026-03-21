@@ -328,6 +328,14 @@
       "zoompan": true
     },
     {
+      "type": "video",
+      "notes": "Keys hidden in PNG's??\n\nI thought i was going crazy, trufflehog flagging a bunch of PNG's? \n\nEither I wwas crazy, or trufflehog was bugging out, it seemed like it wasn't possible, at least not in the volume I was seeing it...",
+      "src": "media/video/20260320_1305_01km6176p2fyws44hhrahb414p.mp4",
+      "loop": false,
+      "volume": 0,
+      "autoAdvance": false
+    },
+    {
       "type": "image",
       "notes": "That has to include an API key doesn't it?\n\nHow many people use Comfy and doesn't know their prompts, workflows, and API keys are embedded inside their images?\n\nI sure wouldn't have known if we weren't specifically scanning for keys in huggingface...",
       "src": "media/img/HF_Scanning_Results_comfyui.png",
@@ -659,8 +667,8 @@
     },
     {
       "src": "media/audio/stripeCriminals.mp3",
-      "startSlide": 57,
-      "endSlide": 62,
+      "startSlide": 58,
+      "endSlide": 63,
       "loop": false,
       "volume": 38,
       "pauseSlides": [],
@@ -671,7 +679,7 @@
     {
       "src": "media/audio/comfyUIBackground.mp3",
       "startSlide": 44,
-      "endSlide": 47,
+      "endSlide": 48,
       "loop": true,
       "volume": 45,
       "pauseSlides": [],
@@ -681,8 +689,8 @@
     },
     {
       "src": "media/audio/thetimestake4.mp3",
-      "startSlide": 65,
-      "endSlide": 73,
+      "startSlide": 66,
+      "endSlide": 74,
       "loop": true,
       "volume": 0,
       "pauseSlides": [],
@@ -692,8 +700,8 @@
     },
     {
       "src": "media/audio/firstStory.mp3",
-      "startSlide": 75,
-      "endSlide": 83,
+      "startSlide": 76,
+      "endSlide": 84,
       "loop": true,
       "volume": 45,
       "pauseSlides": [],
@@ -703,9 +711,9 @@
     },
     {
       "src": "media/audio/russian.mp3",
-      "startSlide": 50,
-      "endSlide": 54,
-      "loop": false,
+      "startSlide": 51,
+      "endSlide": 55,
+      "loop": true,
       "volume": 38,
       "pauseSlides": [],
       "fadeEnabled": false,
@@ -714,8 +722,8 @@
     },
     {
       "src": "media/audio/humblinglyLarge2.mp3",
-      "startSlide": 84,
-      "endSlide": 85,
+      "startSlide": 85,
+      "endSlide": 86,
       "loop": true,
       "volume": 46,
       "pauseSlides": [],
