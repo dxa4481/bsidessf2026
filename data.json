@@ -145,7 +145,7 @@
     },
     {
       "type": "video",
-      "notes": "At the time of making this slide, which was a week ago, we scanned about 24% of the datasets on Huggingface for live API keys and passowrds with TruffleHog...\n\n70,000 unique live keys... and counting\n\nWe can't wrap our minds around it. That's why I had to show you zoomed in examples of individual keys... there just isn't time to tell 70,000 stories\n\nAnd my shame is, we couldn't scan the whole hub in time... it's too much data, it's going to take us months to complete...\n\n\n",
+      "notes": "At the time of making this slide, which was a week ago, we scanned about 67 million files from datasets on Huggingface using trufflehog, for live API keys and passowrds\n\n70,000 unique live keys... and counting\n\nWe can't wrap our minds around it. That's why I had to show you zoomed in examples of individual keys... there just isn't time to tell 70,000 stories\n\nAnd my shame is, we couldn't scan the whole hub in time... it's too much data, it's going to take us months to complete...\n\n\n",
       "src": "media/video/StatsCascade.mp4",
       "loop": false,
       "volume": 100,
@@ -153,9 +153,17 @@
     },
     {
       "type": "image",
-      "notes": "And here's my shame... when I submitted this talk I really thought we would be able to scan all of huggingface in time...\n\nBut I was wrong. As of about a week ago we were only about 25% of the way through, for which we found 70,000 unique live API keys and passwords exposed. It's going months to get this all the way to 100%, and this means probably the most interesting stories are still to come...\n\nThey say one exposed key is a tragedy, well 70,000 is a statistic... so I'm going to take you on a journey showing you some of those individual tragedies...",
+      "notes": "when I submitted this talk I really thought we would be able to scan all of huggingface in time...\n\nBut I was wrong. As of about a week ago we were only about 25% of the way through, for which we found 70,000 unique live API keys and passwords exposed. It's going months to get this all the way to 100%, and this means probably the most interesting stories are still to come...\n\n",
       "src": "media/img/HF_Scanning_Results_total.png",
       "zoompan": true
+    },
+    {
+      "type": "video",
+      "notes": "If you follow us on twitter, you might know we scan all kinds of irregular things with TruffleHog and find all kinds of keys where you might not expect them...\n\nOne of my favorite places was finding an AWS key in my smart bed...\n\nBut here's the thing about Huggingface...\n\nIt has almost ALL of these places, inside of it.\n\nSomeone scraped github, NPM, S3 buckets, telegram, stack overflow the whole damn internet, it's ALL on huggingface...\n\nIt's SO much...\n\nA single exposed AWS key is a tragedy, so what's thousands of them? They just become a statistic at that point... so I'm going to take you on a journey showing you some of those individual tragedies...",
+      "src": "media/video/trufflehog.mov",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
     },
     {
       "type": "video",
@@ -326,6 +334,14 @@
       "notes": "One of those early decisions was to optionally embed the workflow, prompts, everything used to create the image, so anyone could recreate it pixel accurately, and modify it themselves...\n\nExcept... the word optionally is doing some heavy lifting there... for a default behavior\n\nAnd everything used to create the image?? Well... if you're not using a local open source model...",
       "src": "media/img/Cursor_and_ComfyUI_-_Wikipedia.png",
       "zoompan": true
+    },
+    {
+      "type": "video",
+      "notes": "Yeah... that's right... API keys in the PNG's...\n\nthat was a pretty weird thing seeing that...\n\nI felt like i was going crazy\n\nIt made me second guess trufflehog until I opened up the photos in VIM",
+      "src": "media/video/20260320_1305_01km6176p2fyws44hhrahb414p.mp4",
+      "loop": true,
+      "volume": 0,
+      "autoAdvance": false
     },
     {
       "type": "image",
@@ -627,7 +643,7 @@
     {
       "src": "media/audio/humblinglyLarge2.mp3",
       "startSlide": 14,
-      "endSlide": 22,
+      "endSlide": 23,
       "loop": true,
       "volume": 35,
       "pauseSlides": [],
@@ -637,8 +653,8 @@
     },
     {
       "src": "media/audio/firstStory.mp3",
-      "startSlide": 23,
-      "endSlide": 31,
+      "startSlide": 24,
+      "endSlide": 32,
       "loop": true,
       "volume": 38,
       "pauseSlides": [],
@@ -648,8 +664,8 @@
     },
     {
       "src": "media/audio/nutanixMusic.mp3",
-      "startSlide": 33,
-      "endSlide": 41,
+      "startSlide": 34,
+      "endSlide": 42,
       "loop": true,
       "volume": 32,
       "pauseSlides": [],
@@ -659,8 +675,8 @@
     },
     {
       "src": "media/audio/stripeCriminals.mp3",
-      "startSlide": 57,
-      "endSlide": 62,
+      "startSlide": 59,
+      "endSlide": 64,
       "loop": false,
       "volume": 38,
       "pauseSlides": [],
@@ -670,8 +686,8 @@
     },
     {
       "src": "media/audio/comfyUIBackground.mp3",
-      "startSlide": 44,
-      "endSlide": 47,
+      "startSlide": 45,
+      "endSlide": 49,
       "loop": true,
       "volume": 45,
       "pauseSlides": [],
@@ -681,10 +697,10 @@
     },
     {
       "src": "media/audio/thetimestake4.mp3",
-      "startSlide": 65,
-      "endSlide": 73,
+      "startSlide": 67,
+      "endSlide": 75,
       "loop": true,
-      "volume": 41,
+      "volume": 0,
       "pauseSlides": [],
       "fadeEnabled": false,
       "fadeIn": 0.5,
@@ -692,8 +708,8 @@
     },
     {
       "src": "media/audio/firstStory.mp3",
-      "startSlide": 75,
-      "endSlide": 83,
+      "startSlide": 77,
+      "endSlide": 85,
       "loop": true,
       "volume": 45,
       "pauseSlides": [],
@@ -703,8 +719,8 @@
     },
     {
       "src": "media/audio/russian.mp3",
-      "startSlide": 50,
-      "endSlide": 54,
+      "startSlide": 52,
+      "endSlide": 56,
       "loop": false,
       "volume": 38,
       "pauseSlides": [],
@@ -714,8 +730,8 @@
     },
     {
       "src": "media/audio/humblinglyLarge2.mp3",
-      "startSlide": 84,
-      "endSlide": 85,
+      "startSlide": 86,
+      "endSlide": 87,
       "loop": true,
       "volume": 46,
       "pauseSlides": [],
