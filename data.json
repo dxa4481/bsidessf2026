@@ -12,7 +12,7 @@
     {
       "type": "video",
       "notes": "",
-      "src": "media/video/intro.m4v",
+      "src": "media/video/bsidesopenerpt1.m4v",
       "loop": false,
       "volume": 100,
       "autoAdvance": true
@@ -20,7 +20,7 @@
     {
       "type": "video",
       "notes": "",
-      "src": "media/video/whoami.m4v",
+      "src": "media/video/bsidesopenerpt2.m4v",
       "loop": true,
       "volume": 100,
       "autoAdvance": false
@@ -739,8 +739,5 @@
       "fadeIn": 0.5,
       "fadeOut": 0.5
     }
-  ],
-  "settings": {
-    "subtitleSize": 100
-  }
+  ]
 }
