@@ -152,6 +152,14 @@
       "autoAdvance": false
     },
     {
+      "type": "video",
+      "notes": "I'll put this another way... if you're familiar with me or Truffle Security you know we put out all kinds of research on scanning unique places for secrets..\n\nOne of my favorite places was finding an AWS key in my smart bed...\n\nBut the reality is, almost ALL these places, GitHub, NPM, S3, Postman, Public websites...\n\nThey're all on huggingface. Data scientests scraped all of that stuff up and hosted it as seperate datasets on huggingface, just subsets of the 880,000 datasets\n\nSo huggingface really is the big one.",
+      "src": "media/video/trufflehog.mov",
+      "loop": false,
+      "volume": 100,
+      "autoAdvance": false
+    },
+    {
       "type": "image",
       "notes": "And here's my shame... when I submitted this talk I really thought we would be able to scan all of huggingface in time...\n\nBut I was wrong. As of about a week ago we were only about 25% of the way through, for which we found 70,000 unique live API keys and passwords exposed. It's going months to get this all the way to 100%, and this means probably the most interesting stories are still to come...\n\nThey say one exposed key is a tragedy, well 70,000 is a statistic... so I'm going to take you on a journey showing you some of those individual tragedies...",
       "src": "media/img/HF_Scanning_Results_total.png",
@@ -635,7 +643,7 @@
     {
       "src": "media/audio/humblinglyLarge2.mp3",
       "startSlide": 14,
-      "endSlide": 22,
+      "endSlide": 23,
       "loop": true,
       "volume": 35,
       "pauseSlides": [],
@@ -645,8 +653,8 @@
     },
     {
       "src": "media/audio/firstStory.mp3",
-      "startSlide": 23,
-      "endSlide": 31,
+      "startSlide": 24,
+      "endSlide": 32,
       "loop": true,
       "volume": 38,
       "pauseSlides": [],
@@ -656,8 +664,8 @@
     },
     {
       "src": "media/audio/nutanixMusic.mp3",
-      "startSlide": 33,
-      "endSlide": 41,
+      "startSlide": 34,
+      "endSlide": 42,
       "loop": true,
       "volume": 32,
       "pauseSlides": [],
@@ -667,8 +675,8 @@
     },
     {
       "src": "media/audio/stripeCriminals.mp3",
-      "startSlide": 58,
-      "endSlide": 63,
+      "startSlide": 59,
+      "endSlide": 64,
       "loop": false,
       "volume": 38,
       "pauseSlides": [],
@@ -678,8 +686,8 @@
     },
     {
       "src": "media/audio/comfyUIBackground.mp3",
-      "startSlide": 44,
-      "endSlide": 48,
+      "startSlide": 45,
+      "endSlide": 49,
       "loop": true,
       "volume": 45,
       "pauseSlides": [],
@@ -689,8 +697,8 @@
     },
     {
       "src": "media/audio/thetimestake4.mp3",
-      "startSlide": 66,
-      "endSlide": 74,
+      "startSlide": 67,
+      "endSlide": 75,
       "loop": true,
       "volume": 0,
       "pauseSlides": [],
@@ -700,8 +708,8 @@
     },
     {
       "src": "media/audio/firstStory.mp3",
-      "startSlide": 76,
-      "endSlide": 84,
+      "startSlide": 77,
+      "endSlide": 85,
       "loop": true,
       "volume": 45,
       "pauseSlides": [],
@@ -711,8 +719,8 @@
     },
     {
       "src": "media/audio/russian.mp3",
-      "startSlide": 51,
-      "endSlide": 55,
+      "startSlide": 52,
+      "endSlide": 56,
       "loop": true,
       "volume": 38,
       "pauseSlides": [],
@@ -722,8 +730,8 @@
     },
     {
       "src": "media/audio/humblinglyLarge2.mp3",
-      "startSlide": 85,
-      "endSlide": 86,
+      "startSlide": 86,
+      "endSlide": 87,
       "loop": true,
       "volume": 46,
       "pauseSlides": [],
